@@ -168,6 +168,10 @@ test("scheduled source refreshes are leased, monitored, ingested, and backed off
     assert.equal(first.completed, 1);
     assert.equal(first.failed, 0);
     assert.equal(first.runs[0]?.rowCount, 10);
+    const firstEvidence = await service.listLatestSuccessfulRuns(config.registry.id);
+    assert.equal(firstEvidence.get(definition.id)?.id, first.runs[0].id);
+    assert.deepEqual(firstEvidence.get(definition.id)?.sourcePages, ["https://example.gov/refresh"]);
+    assert.equal((await service.listLatestSuccessfulRuns("other-registry")).size, 0);
 
     const queued = await service.queueNow(
       config.registry.id,
@@ -227,6 +231,22 @@ test("scheduled source refreshes are leased, monitored, ingested, and backed off
       },
     });
     assert.equal(failure.failed, 1);
+    // A failed attempt must not replace the last successful provenance record.
+    const afterFailure = await service.listLatestSuccessfulRuns(config.registry.id);
+    assert.equal(afterFailure.get(definition.id)?.id, second.runs[0].id);
+    assert.equal(afterFailure.get(definition.id)?.status, "completed_with_warnings");
+    assert.equal(afterFailure.get(definition.id)?.outputSha256, sha256String(secondOutput));
+    const stats = (await service.listMonitoringStats(config.registry.id, initialNow, "2099-01-01T00:00:00Z")).get(definition.id);
+    assert.equal(stats.completed, 2);
+    assert.equal(stats.failed, 1);
+    assert.equal(stats.warnings, 1);
+    assert.equal(stats.inputRows, 12);
+    assert.ok(stats.updatedRows >= 0 && stats.updatedRows <= stats.inputRows);
+    assert.equal(stats.failureRatePercent, 100 / 3);
+    assert.equal(stats.sourceUpdateRatePercent, stats.updatedRows * 100 / 12);
+    assert.equal((await service.listMonitoringStats("other-registry", initialNow, "2099-01-01T00:00:00Z")).size, 0);
+    assert.equal((await service.listMonitoringStats(config.registry.id, "1990-01-01T00:00:00Z", "1990-01-02T00:00:00Z")).size, 0);
+    await assert.rejects(service.listMonitoringStats(config.registry.id, "2099-01-01T00:00:00Z", initialNow), /monitoring window/);
 
     const summary = await new PostgresAdminRepository(
       pool,
@@ -247,3 +267,4 @@ test("scheduled source refreshes are leased, monitored, ingested, and backed off
     await pool.end();
   }
 });
+
