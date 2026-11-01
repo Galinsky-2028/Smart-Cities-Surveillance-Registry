@@ -31,3 +31,11 @@ measure representative long-list search latency and browser performance under
 load. No live browser, screen-reader, production load or certification result is
 claimed by this change. Keep this PR draft until those acceptance checks and
 remaining actionable fixes are completed.
+
+For a local running application, run `node scripts/search-load-probe.mjs
+http://127.0.0.1:3000/registries/REGISTRY_ID/search`. The probe is restricted to
+loopback search routes, never follows redirects, caps concurrency/request count
+and response size, and reports observed p50/p95 latency plus separate failures.
+Its unit tests use HTTP-response fixtures; those timings are not product latency.
+Run it against representative local data and retain the actual report before
+claiming load acceptance. Do not point it at a production host.
