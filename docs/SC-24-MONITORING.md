@@ -18,8 +18,17 @@ failure percentage, plus an input-row update percentage from linked non-dry-run
 ingestion runs. The denominator is recorded total input rows, including rows that
 failed ingestion; the numerator is updated rows. This measures source-driven
 updates, not verified factual corrections. An absent denominator is unknown,
-never a manufactured zero-percent observation. A semantic editorial correction
-rate is not available from the current event schema and is not claimed here.
+never a manufactured zero-percent observation.
+
+Registry-level correction monitoring counts record.fields_changed audit events
+whose recorded actor is nonnull and whose reason starts with "Correction: "
+followed by a nonblank explanation. Operators can use the existing authenticated
+record-update reason field; no new mutation route is added. The denominator is
+all audited field-change events in the same registry and time window. The page
+labels this operator-declared correction share, not a factual-accuracy finding.
+Ordinary updates do not silently become corrections. No field changes yields an
+unknown rate. The immutable event retains actor, explanation and record identity;
+the monitoring query returns only aggregate counts to authenticated admins.
 
 Database queries bind registry identity on both source and ingestion sides and
 use explicit window timestamps. The existing administrator session check runs

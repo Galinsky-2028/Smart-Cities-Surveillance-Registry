@@ -71,7 +71,7 @@ export default async function SourceRefreshAdminPage({
     getRepositories().sourceRefresh;
   const observedAt = new Date().toISOString();
   const sinceAt = new Date(Date.parse(observedAt) - 24 * 60 * 60 * 1000).toISOString();
-  const [health, runs, successfulRuns, monitoringStats] =
+  const [health, runs, successfulRuns, monitoringStats, corrections] =
     await Promise.all([
       service.listHealth(registryId, observedAt),
       service.listRuns(registryId, {
@@ -79,6 +79,7 @@ export default async function SourceRefreshAdminPage({
       }),
       service.listLatestSuccessfulRuns(registryId),
       service.listMonitoringStats(registryId, sinceAt, observedAt),
+      service.getCorrectionMonitoring(registryId, sinceAt, observedAt),
     ]);
   const returnTo =
     "/admin/registries/" +
@@ -140,6 +141,15 @@ export default async function SourceRefreshAdminPage({
           <strong>{running}</strong>
           <span>Running</span>
         </div>
+      </section>
+
+      <section className="section-block" aria-label="Correction monitoring">
+        <h2>Declared corrections in the last 24 hours</h2>
+        <p>
+          {corrections.declaredCorrections} operator-declared corrections across {corrections.fieldChanges} audited field changes
+          {" · Rate: "}{corrections.declaredCorrectionRatePercent === null ? "Unknown" : `${corrections.declaredCorrectionRatePercent.toFixed(1)}%`}.
+          {" "}This counts declarations, not verified factual accuracy. To identify a correction, start the record-update reason with <code>Correction: </code> followed by an explanation.
+        </p>
       </section>
 
       <section className="section-block">

@@ -138,6 +138,12 @@ export interface SourceRefreshMonitoringStats {
   sourceUpdateRatePercent: number | null;
 }
 
+export interface SourceCorrectionMonitoring {
+  fieldChanges: number;
+  declaredCorrections: number;
+  declaredCorrectionRatePercent: number | null;
+}
+
 export interface SourceRefreshClaim {
   job: SourceRefreshJob;
   run: SourceRefreshRun;
@@ -842,6 +848,27 @@ export class PostgresSourceRefreshService {
       failureRatePercent: row.completed + row.failed > 0 ? row.failed * 100 / (row.completed + row.failed) : null,
       sourceUpdateRatePercent: row.input_rows > 0 ? row.updated_rows * 100 / row.input_rows : null,
     }]));
+  }
+
+  /** Explicit operator declarations, not an inference that an edit is true. */
+  async getCorrectionMonitoring(registryId: string, sinceAt: string, untilAt: string): Promise<SourceCorrectionMonitoring> {
+    const since = validDateTime(sinceAt, "sinceAt");
+    const until = validDateTime(untilAt, "untilAt");
+    if (Date.parse(since) > Date.parse(until)) throw new Error("Invalid monitoring window");
+    const result = await this.pool.query<{ field_changes: number; declared_corrections: number }>(
+      `SELECT count(*)::int AS field_changes,
+         count(*) FILTER (WHERE actor_id IS NOT NULL AND reason ~* '^Correction: [^[:space:]]')::int AS declared_corrections
+       FROM civic_registry_audit_events
+       WHERE registry_id = $1 AND subject_type = 'record'
+         AND event_type = 'record.fields_changed'
+         AND occurred_at >= $2::timestamptz AND occurred_at <= $3::timestamptz`,
+      [registryId, since, until],
+    );
+    const row = result.rows[0];
+    const fieldChanges = row?.field_changes ?? 0;
+    const declaredCorrections = row?.declared_corrections ?? 0;
+    return { fieldChanges, declaredCorrections,
+      declaredCorrectionRatePercent: fieldChanges > 0 ? declaredCorrections * 100 / fieldChanges : null };
   }
 
   getHealth(

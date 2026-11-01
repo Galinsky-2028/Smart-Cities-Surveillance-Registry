@@ -247,6 +247,34 @@ test("scheduled source refreshes are leased, monitored, ingested, and backed off
     assert.equal((await service.listMonitoringStats("other-registry", initialNow, "2099-01-01T00:00:00Z")).size, 0);
     assert.equal((await service.listMonitoringStats(config.registry.id, "1990-01-01T00:00:00Z", "1990-01-02T00:00:00Z")).size, 0);
     await assert.rejects(service.listMonitoringStats(config.registry.id, "2099-01-01T00:00:00Z", initialNow), /monitoring window/);
+    const beforeCorrections = await service.getCorrectionMonitoring(config.registry.id, initialNow, "2099-01-01T00:00:00Z");
+    const correctionClient = await pool.connect();
+    try {
+      await correctionClient.query("BEGIN");
+      await correctionClient.query("SELECT set_config('civic_registry.actor_id', 'synthetic-reviewer', true), set_config('civic_registry.reason', 'Correction: synthetic source date corrected', true)");
+      await correctionClient.query("UPDATE civic_registry_records SET fields = jsonb_set(fields, '{summary}', to_jsonb($3::text)) WHERE registry_id = $1 AND id = $2",
+        [config.registry.id, "refresh-record-1", "Synthetic corrected summary"]);
+      await correctionClient.query("COMMIT");
+    } finally { correctionClient.release(); }
+    const correctionStats = await service.getCorrectionMonitoring(config.registry.id, initialNow, "2099-01-01T00:00:00Z");
+    assert.equal(correctionStats.declaredCorrections, beforeCorrections.declaredCorrections + 1);
+    assert.equal(correctionStats.fieldChanges, beforeCorrections.fieldChanges + 1);
+    assert.equal(correctionStats.declaredCorrectionRatePercent, correctionStats.declaredCorrections * 100 / correctionStats.fieldChanges);
+    for (const [index, reason] of ["Ordinary refresh update", "Correction: "].entries()) {
+      const client = await pool.connect();
+      try {
+        await client.query("BEGIN");
+        await client.query("SELECT set_config('civic_registry.actor_id', 'synthetic-reviewer', true), set_config('civic_registry.reason', $1, true)", [reason]);
+        await client.query("UPDATE civic_registry_records SET fields = jsonb_set(fields, '{summary}', to_jsonb($3::text)) WHERE registry_id = $1 AND id = $2",
+          [config.registry.id, "refresh-record-1", `Synthetic ordinary update ${index}`]);
+        await client.query("COMMIT");
+      } finally { client.release(); }
+    }
+    const afterOrdinaryUpdates = await service.getCorrectionMonitoring(config.registry.id, initialNow, "2099-01-01T00:00:00Z");
+    assert.equal(afterOrdinaryUpdates.declaredCorrections, correctionStats.declaredCorrections);
+    assert.equal(afterOrdinaryUpdates.fieldChanges, correctionStats.fieldChanges + 2);
+    assert.deepEqual(await service.getCorrectionMonitoring("other-registry", initialNow, "2099-01-01T00:00:00Z"),
+      { fieldChanges: 0, declaredCorrections: 0, declaredCorrectionRatePercent: null });
 
     const summary = await new PostgresAdminRepository(
       pool,
