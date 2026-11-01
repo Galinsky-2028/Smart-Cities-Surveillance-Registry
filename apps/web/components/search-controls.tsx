@@ -53,6 +53,9 @@ function SearchSelect({
       <span>{label}</span>
       <select name={name} defaultValue={selected ?? ""}>
         <option value="">Any</option>
+        {selected && !options.some((option) => option.value === selected) ? (
+          <option value={selected}>{selected} (selected)</option>
+        ) : null}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -74,6 +77,7 @@ export function SearchControls({
   action,
   includeRecordType = false,
   extraFilters,
+  validationMessageId,
 }: {
   registry: CompiledRegistryConfig;
   recordType?: CompiledRecordTypeConfig;
@@ -82,6 +86,7 @@ export function SearchControls({
   action: string;
   includeRecordType?: boolean;
   extraFilters?: ReactNode;
+  validationMessageId?: string;
 }) {
   const query = firstSearchValue(params.q) ?? "";
   const selectedStatus =
@@ -121,6 +126,9 @@ export function SearchControls({
       className="search-panel"
       method="get"
       action={action}
+      role="search"
+      aria-label="Public registry records"
+      aria-describedby={validationMessageId}
     >
       {!includeRecordType && recordType ? (
         <input
