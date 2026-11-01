@@ -3006,6 +3006,14 @@ h3 {
   border: 2px solid currentColor;
 }
 .skip-link:focus-visible { top: 0.5rem; }
+.registry-search-entry input:focus-visible,
+.search-query input:focus-visible,
+.search-field select:focus-visible,
+.search-range input:focus-visible,
+.search-filters summary:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,

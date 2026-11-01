@@ -30,6 +30,9 @@ decorative border, exceeding3:1 against the declared surfaces. The search input
 may shrink inside its flex row to avoid its long placeholder forcing mobile
 overflow. The contrast test computes ratios from actual CSS tokens; runtime
 zoom/mobile checks remain required.
+Specific keyboard-focus rules override the older translucent search focus ring.
+Decimal range controls accept fractional values, and invalid selected sorts stay
+available for correction rather than disappearing on the error page.
 
 Remaining acceptance: run the real rendered UI through keyboard-only navigation,
 screen-reader announcements, zoom/mobile and focus-after-pagination checks;

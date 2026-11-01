@@ -239,6 +239,7 @@ export function SearchControls({
                           <input
                             name={`from_${field.id}`}
                             type={inputType}
+                            step={field.type === "decimal" ? "any" : field.type === "integer" ? 1 : undefined}
                             defaultValue={
                               firstSearchValue(
                                 params[`from_${field.id}`],
@@ -251,6 +252,7 @@ export function SearchControls({
                           <input
                             name={`to_${field.id}`}
                             type={inputType}
+                            step={field.type === "decimal" ? "any" : field.type === "integer" ? 1 : undefined}
                             defaultValue={
                               firstSearchValue(
                                 params[`to_${field.id}`],
@@ -304,6 +306,9 @@ export function SearchControls({
               defaultValue={selectedSort}
             >
               <option value="">Default</option>
+              {selectedSort && !["relevance", "updated", "published", ...sortableFields.map((field) => `field:${field.id}`)].includes(selectedSort) ? (
+                <option value={selectedSort}>{selectedSort} (selected)</option>
+              ) : null}
               {query ? (
                 <option value="relevance">Relevance</option>
               ) : null}
@@ -335,7 +340,7 @@ export function SearchControls({
 
         <div className="search-actions">
           <button type="submit">Apply filters</button>
-          <Link href={action}>Clear</Link>
+          <Link href={action} aria-label="Clear all search filters">Clear</Link>
         </div>
       </details>
     </form>
