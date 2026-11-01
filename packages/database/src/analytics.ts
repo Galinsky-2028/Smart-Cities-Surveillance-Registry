@@ -220,6 +220,13 @@ export class PostgresAnalyticsRepository {
           WHERE ${where}
             ${scope === "public" ? `
               AND citation.visibility = 'public'
+              AND (
+                citation.field_id IS NULL
+                OR (
+                  record.public_fields ? citation.field_id
+                  AND record.public_fields -> citation.field_id <> 'null'::jsonb
+                )
+              )
               AND NOT EXISTS (
                 SELECT 1
                 FROM civic_registry_record_disclosures AS disclosure
