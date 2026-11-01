@@ -25,6 +25,12 @@ white is5.15:1, paper #f4f6f3 is4.74:1, and soft surface #edf1ed is4.51:1;
 focus #1b5f43 against white is7.60:1. These calculations cover these exact pairs,
 not every composited state or rendered pixel.
 
+Search control outlines now use the muted palette color instead of the pale
+decorative border, exceeding3:1 against the declared surfaces. The search input
+may shrink inside its flex row to avoid its long placeholder forcing mobile
+overflow. The contrast test computes ratios from actual CSS tokens; runtime
+zoom/mobile checks remain required.
+
 Remaining acceptance: run the real rendered UI through keyboard-only navigation,
 screen-reader announcements, zoom/mobile and focus-after-pagination checks;
 measure representative long-list search latency and browser performance under
