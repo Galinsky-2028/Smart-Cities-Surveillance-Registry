@@ -29,7 +29,10 @@ export async function probeLocalSearch({ url, requests = 20, concurrency = 2, ti
       try {
         const response = await fetchImpl(target, { redirect: "manual", signal: AbortSignal.timeout(timeoutMs) });
         status = response.status;
-        if (!response.ok) throw new Error(`HTTP ${status}`);
+        if (!response.ok) {
+          await response.body?.cancel();
+          throw new Error(`HTTP ${status}`);
+        }
         if (response.body) {
           const reader = response.body.getReader();
           let bytes = 0;
