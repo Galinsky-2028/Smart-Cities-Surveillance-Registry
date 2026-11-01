@@ -306,7 +306,7 @@ export function SearchControls({
               defaultValue={selectedSort}
             >
               <option value="">Default</option>
-              {selectedSort && !["relevance", "updated", "published", ...sortableFields.map((field) => `field:${field.id}`)].includes(selectedSort) ? (
+              {selectedSort && ![...(query ? ["relevance"] : []), "updated", "published", ...sortableFields.map((field) => `field:${field.id}`)].includes(selectedSort) ? (
                 <option value={selectedSort}>{selectedSort} (selected)</option>
               ) : null}
               {query ? (
