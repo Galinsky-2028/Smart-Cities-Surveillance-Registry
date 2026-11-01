@@ -77,3 +77,44 @@ test("direct storage rejects conflicting duplicate source assertions", async () 
   await assert.rejects(new PostgresExternalComplianceRepository(pool).importClaims(scope, [claim, { ...claim, assertion: "Contradiction" }]), /Conflicting duplicate claim/);
   assert.equal(calls.length, 0);
 });
+
+test("a prior delivery must match content before being counted as an idempotent retry", async () => {
+  for (const previous of [
+    { source_url: claim.sourceUrl, assertion: "Contradictory prior assertion" },
+    { source_url: "https://city.example.gov/different", assertion: claim.assertion },
+    undefined,
+  ]) {
+    const calls = [];
+    const client = { async query(sql, values) {
+      calls.push({ sql, values });
+      if (sql.includes("SELECT 1 FROM civic_registry_records")) return { rows: [{}] };
+      if (sql.includes("INSERT INTO smart_cities_external_claims")) return { rows: [], rowCount: 0 };
+      if (sql.includes("SELECT source_url, assertion FROM smart_cities_external_claims")) return { rows: previous ? [previous] : [] };
+      return { rows: [], rowCount: 1 };
+    }, release() { calls.push({ sql: "RELEASE" }); } };
+    const repository = new PostgresExternalComplianceRepository({ connect: async () => client });
+    await assert.rejects(repository.importClaims(scope, [claim]), /Conflicting duplicate claim/);
+    assert.ok(calls.some(call => call.sql === "ROLLBACK"));
+    assert.ok(!calls.some(call => call.sql === "COMMIT"));
+    assert.equal(calls.at(-1).sql, "RELEASE");
+  }
+});
+
+test("identical stored content is an idempotent retry with a fully scoped lookup", async () => {
+  const calls = [];
+  const client = { async query(sql, values) {
+    calls.push({ sql, values });
+    if (sql.includes("SELECT 1 FROM civic_registry_records")) return { rows: [{}] };
+    if (sql.includes("INSERT INTO smart_cities_external_claims")) return { rows: [], rowCount: 0 };
+    if (sql.includes("SELECT source_url, assertion FROM smart_cities_external_claims")) return { rows: [{ source_url: claim.sourceUrl, assertion: claim.assertion }] };
+    return { rows: [], rowCount: 1 };
+  }, release() {} };
+  const result = await new PostgresExternalComplianceRepository({ connect: async () => client }).importClaims(scope, [claim]);
+  assert.equal(result.inserted, 0);
+  assert.equal(result.received, 1);
+  const lookup = calls.find(call => call.sql.includes("SELECT source_url, assertion"));
+  assert.ok(lookup);
+  assert.deepEqual(lookup.values, [scope.registryId, scope.recordId, scope.providerId, claim.sourceId, claim.kind, claim.observedAt]);
+  assert.ok(calls.some(call => call.sql === "COMMIT"));
+});
+

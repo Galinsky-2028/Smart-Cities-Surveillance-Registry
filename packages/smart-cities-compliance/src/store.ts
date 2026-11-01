@@ -48,6 +48,23 @@ export class PostgresExternalComplianceRepository {
            claim.observedAt, claim.sourceUrl, claim.assertion, importId],
         );
         inserted += result.rowCount ?? 0;
+        if (result.rowCount === 0) {
+          // The unique insert waits for concurrent delivery transactions. A
+          // separate statement then sees the committed winner at READ COMMITTED.
+          // Identical retries are harmless; contradictory provenance must not
+          // be reported as a completed import or partially commit this batch.
+          const previous = await client.query(
+            `SELECT source_url, assertion FROM smart_cities_external_claims
+             WHERE registry_id = $1 AND record_id = $2 AND provider_id = $3
+               AND source_id = $4 AND kind = $5 AND observed_at = $6::timestamptz`,
+            [scope.registryId, scope.recordId, scope.providerId, claim.sourceId,
+             claim.kind, claim.observedAt],
+          );
+          const stored = previous.rows[0];
+          if (!stored || stored.source_url !== claim.sourceUrl || stored.assertion !== claim.assertion) {
+            throw new Error("Conflicting duplicate claim");
+          }
+        }
       }
       await client.query(
         "UPDATE smart_cities_external_claim_imports SET inserted_count = $2 WHERE id = $1",
@@ -94,3 +111,4 @@ export class PostgresExternalComplianceRepository {
     }; });
   }
 }
+

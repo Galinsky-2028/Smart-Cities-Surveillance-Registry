@@ -56,5 +56,38 @@ test("external assertions persist idempotently with scoped audit and tenant isol
     );
     assert.equal(audit.rows.length, 3);
     assert.deepEqual(audit.rows.map(row => row.inserted_count).sort(), [0, 0, 1]);
+    // A later batch may not replace or silently contradict a previous fact.
+    for (const conflict of [
+      { ...claim, assertion: "Contradiction" },
+      { ...claim, sourceUrl: "https://agency.example.gov/different-report" },
+    ]) {
+      await assert.rejects(store.importClaims(scope, [conflict]), /Conflicting duplicate claim/);
+    }
+    // PostgreSQL keys normalize offsets, so an equivalent instant remains a retry.
+    assert.equal((await store.importClaims(scope, [{ ...claim, observedAt: "2026-10-18T08:00:00-04:00" }])).inserted, 0);
+    // A conflict rolls back the entire delivery, including earlier new facts/audit.
+    await assert.rejects(store.importClaims(scope, [
+      { ...claim, sourceId: "rolled-back-report" }, { ...claim, assertion: "Contradiction" },
+    ]), /Conflicting duplicate claim/);
+    const afterConflict = await store.listForRecord(scope.registryId, scope.recordId);
+    assert.equal(afterConflict.length, 1);
+    assert.equal(afterConflict[0].assertion, claim.assertion);
+    assert.equal(afterConflict[0].importId, first.importId);
+    const afterAudit = await pool.query(
+      "SELECT count(*)::int AS count FROM smart_cities_external_claim_imports WHERE registry_id = $1 AND record_id = $2",
+      [scope.registryId, scope.recordId],
+    );
+    assert.equal(afterAudit.rows[0].count, 4);
+    // Two concurrent contradictory deliveries have one winner, never two successes.
+    const deliveries = await Promise.allSettled([
+      store.importClaims(scope, [{ ...claim, sourceId: "concurrent-report", assertion: "First" }]),
+      store.importClaims(scope, [{ ...claim, sourceId: "concurrent-report", assertion: "Second" }]),
+    ]);
+    assert.equal(deliveries.filter(item => item.status === "fulfilled").length, 1);
+    const rejected = deliveries.find(item => item.status === "rejected");
+    assert.match(rejected.reason.message, /Conflicting duplicate claim/);
+    const concurrent = (await store.listForRecord(scope.registryId, scope.recordId)).filter(item => item.sourceId === "concurrent-report");
+    assert.equal(concurrent.length, 1);
   } finally { await pool.end(); }
 });
+
