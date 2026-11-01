@@ -70,3 +70,12 @@ test("pinned transport rejects oversized bodies and aborted requests", async () 
   await assert.rejects(fetchPinnedSource(url, "8.8.8.8", {}, controller.signal,
     20, fakeRequest("unused")), /aborted/);
 });
+
+test("invalid limits fail closed and stalled DNS has a bounded timeout", async () => {
+  for (const options of [{ timeoutMs: Infinity }, { timeoutMs: 0 }, { maxResponseBytes: NaN },
+    { maxResponseBytes: -1 }, { maxRedirects: 100 }]) {
+    assert.throws(() => createPublicSourceClient(options), /limits are invalid/);
+  }
+  const client = createPublicSourceClient({ timeoutMs: 5, dnsLookup: () => new Promise(() => {}) });
+  await assert.rejects(client.fetchBytes("https://example.gov/file.pdf", ["example.gov"]), /DNS lookup timed out/);
+});

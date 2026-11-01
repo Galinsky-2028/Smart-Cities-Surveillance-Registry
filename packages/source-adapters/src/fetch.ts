@@ -218,6 +218,11 @@ export function createPublicSourceClient(
     options.maxRedirects ?? DEFAULT_MAX_REDIRECTS;
   const userAgent =
     options.userAgent ?? DEFAULT_USER_AGENT;
+  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 120_000 ||
+      !Number.isSafeInteger(maxResponseBytes) || maxResponseBytes < 1 || maxResponseBytes > 100 * 1024 * 1024 ||
+      !Number.isSafeInteger(maxRedirects) || maxRedirects < 0 || maxRedirects > 10) {
+    throw new Error("Public source client resource limits are invalid.");
+  }
   const fetchImpl = options.fetchImpl;
   const lookupImpl =
     options.dnsLookup ??
@@ -244,8 +249,13 @@ export function createPublicSourceClient(
     const requestedUrl = current.toString();
 
     while (true) {
-      const addresses =
-        await lookupImpl(current.hostname);
+      let dnsTimer: ReturnType<typeof setTimeout> | undefined;
+      const addresses = await Promise.race([
+        lookupImpl(current.hostname),
+        new Promise<never>((_resolve, reject) => {
+          dnsTimer = setTimeout(() => reject(new Error("Source DNS lookup timed out.")), timeoutMs);
+        }),
+      ]).finally(() => clearTimeout(dnsTimer));
 
       if (
         addresses.length === 0 ||

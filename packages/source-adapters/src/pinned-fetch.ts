@@ -8,7 +8,7 @@ export function pinnedSourceOptions(url: URL, address: string, headers: Record<s
     protocol: "https:", hostname: address, port: url.port || 443,
     servername: url.hostname.replace(/^\[|\]$/g, ""),
     method: "GET", path: url.pathname + url.search,
-    headers: { ...headers, host: url.host },
+    headers: { ...headers, "accept-encoding": "identity", host: url.host },
     // Never reuse a connection selected for a different DNS validation.
     agent: false as const,
   };
@@ -21,6 +21,10 @@ export function fetchPinnedSource(
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
     const request = requestImpl(pinnedSourceOptions(url, address, headers), (incoming) => {
+      if (incoming.headers["content-encoding"] && incoming.headers["content-encoding"] !== "identity") {
+        request.destroy(new Error("Source returned unsupported compressed content despite identity encoding request."));
+        return;
+      }
       const responseHeaders = new Headers();
       for (const [key, value] of Object.entries(incoming.headers)) {
         if (Array.isArray(value)) value.forEach((item) => responseHeaders.append(key, item));

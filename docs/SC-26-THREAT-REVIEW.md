@@ -49,8 +49,10 @@ database suite and container for the committed head.
 Production ingress must enforce distributed request/connection limits, TLS and
 organization access controls. The in-process sign-in limiter resets with replicas
 or restarts and is a backstop, not a distributed abuse-control service. The existing
-PDF parser checks file signature and uses bounded retrieval; extraction resource
-budgets and parser-version monitoring remain operational hardening follow-up.
+PDF parser checks file signature and uses bounded retrieval. Extraction now rejects
+inputs above25MiB, documents above500pages, or extracted text above5million
+characters, with cleanup preserved on failure. Parser-version monitoring and
+process-level CPU/memory isolation remain operational controls.
 Filesystem storage requires an administrator-controlled directory with atomic
 hard-link support. Host-level write access or hostile symlinks are outside this
 application credential boundary. No infrastructure configuration was changed.
