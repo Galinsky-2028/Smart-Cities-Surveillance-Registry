@@ -1,3 +1,4 @@
+import { handlePublicFeed } from "../apps/web/lib/public-feed.ts";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -7,6 +8,9 @@ import {
 } from "../packages/config/src/index.ts";
 import {
   createDatabasePool,
+  PostgresDisclosureRepository,
+  PostgresRecordRepository,
+  PostgresRegistryConfigRepository,
   runMigrations,
   seedRegistry,
 } from "../packages/database/src/index.ts";
@@ -434,3 +438,35 @@ test("partial final export pages preserve record identity without duplicates or 
   } finally { await pool.end(); }
 });
 
+
+
+test("public feeds exclude drafts and redacted fields and escape Atom markup", async () => {
+  const source = seed.records.find(record => record.recordTypeId === "document");
+  const secret = { ...source, id: "feed-draft", status: "draft",
+    fields: { ...source.fields, title: "DRAFT-FEED-SECRET" } };
+  const visible = { ...source, id: "feed-public", fields: { ...source.fields,
+    title: 'Visible <tag> & "record"', summary: "REDACT-THIS-SUMMARY" } };
+  const pool = await setup([secret, visible]);
+  try {
+    const configs = new PostgresRegistryConfigRepository(pool);
+    const records = new PostgresRecordRepository(pool, configs);
+    const disclosure = new PostgresDisclosureRepository(pool, configs, records);
+    await disclosure.setFieldDisclosure({ registryId: config.registry.id, recordId: visible.id,
+      fieldId: "summary", disposition: "withheld", actorId: "feed-reviewer",
+      updatedAt: "2026-11-01T00:00:00.000Z" });
+    const url = "https://registry.example/api/v1/registries/public-document-catalog/feed";
+    const json = await handlePublicFeed(new Request(url), config.registry.id);
+    assert.equal(json.status, 200);
+    assert.match(json.headers.get("content-type"), /feed\+json/);
+    assert.equal(json.headers.get("cache-control"), "no-store");
+    const text = await json.text();
+    assert.doesNotMatch(text, /DRAFT-FEED-SECRET|REDACT-THIS-SUMMARY/);
+    assert.ok(JSON.parse(text).items.some(item => item.title === visible.fields.title));
+    const atom = await handlePublicFeed(new Request(url + "?format=atom"), config.registry.id);
+    const xml = await atom.text();
+    assert.match(xml, /Visible &lt;tag&gt; &amp; &quot;record&quot;/);
+    assert.doesNotMatch(xml, /DRAFT-FEED-SECRET|REDACT-THIS-SUMMARY|<tag>/);
+    assert.equal((await handlePublicFeed(new Request(url), "other-registry")).status, 404);
+    assert.equal((await handlePublicFeed(new Request(url + "?format=html"), config.registry.id)).status, 400);
+  } finally { await pool.end(); }
+});

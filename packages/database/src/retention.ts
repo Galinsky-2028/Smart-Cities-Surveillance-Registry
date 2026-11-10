@@ -6,8 +6,12 @@ export interface RetentionRow {
 }
 /** Internal store only. Callers authorize every insert and public disclosure separately. */
 export class PostgresRetentionObservations {
- constructor(private readonly pool:Pool,private readonly authorize:(action:"read"|"write",scope:{registryId:string;recordId:string})=>boolean){
+ private readonly pool: Pool;
+ private readonly authorize: (action:"read"|"write",scope:{registryId:string;recordId:string})=>boolean;
+ constructor(pool:Pool,authorize:(action:"read"|"write",scope:{registryId:string;recordId:string})=>boolean){
   if(typeof authorize!=="function")throw new Error("RETENTION_AUTH_REQUIRED");
+  this.pool = pool;
+  this.authorize = authorize;
  }
  async insert(row:RetentionRow):Promise<boolean>{
   if (!row || ![row.registryId,row.recordId,row.sourceUrl,row.observedAt,row.policy,row.obligation]

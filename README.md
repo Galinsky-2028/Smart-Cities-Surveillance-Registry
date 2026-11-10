@@ -6,25 +6,23 @@ A public transparency and accountability application for documenting smart-city 
 
 This repository is a **downstream application** of the [Civic Registry & Transparency Engine](https://github.com/neophilism/Civic-Registry-Transparency-Engine). The reusable engine remains domain-neutral in its own repository; Smart-Cities-specific schemas, adapters, presentation, and integrations live here.
 
-## Current milestone
+## Release candidate
 
-**PR 17 — Document/PDF ingestion and extraction**
+The downstream application now includes the source and publication console,
+scoped external accountability imports, retention-policy projections, public
+JSON/Atom feeds, source freshness monitoring, transparency analytics, and
+server-bound editor/reviewer/publisher roles. The generic engine remains a
+separate upstream project.
 
-PR 17 connects PR 16 attachment discovery to the generic document engine:
+Run `pnpm run ci` for the complete quality gate. See
+[release evidence](docs/V1_RELEASE_EVIDENCE.md), the
+[deployment guide](docs/PRODUCTION-DEPLOYMENT.md), and the
+[operator guide](docs/ADMIN-CONSOLE.md).
 
-- stable official-source record matching;
-- hardened PDF retrieval;
-- SHA-256 content-addressed storage;
-- immutable document versions when source bytes change;
-- page-by-page PDF text extraction;
-- Source + Document + Citation evidence materialization;
-- page/source provenance; and
-- disclosure-safe full-text search over extracted public documents.
-
-Public document search returns matching page numbers rather than raw snippets,
-preventing the search layer from becoming a disclosure side channel.
-
-See [Smart Cities document and PDF ingestion](docs/SMART-CITIES-DOCUMENTS.md).
+Production installation creates the registry configuration only. Fictional
+Harborview records are for isolated development, and the verified official-source
+pilot remains disabled until editorial review. Empty public results accurately
+represent a registry awaiting reviewed publications.
 
 ## Upstream provenance
 
@@ -52,7 +50,7 @@ Then visit `http://localhost:3000`.
 Run all quality gates with:
 
 ```bash
-pnpm ci
+pnpm run ci
 ```
 
 ## Architecture rule

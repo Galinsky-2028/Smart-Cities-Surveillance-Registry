@@ -63,7 +63,10 @@ domain/config validation and deadline reconciliation.
 
 ## Auditing
 
-The console supplies operator context to lifecycle and deadline services.\nRecord writes pass actor/reason context through the record repository on the\nsame PostgreSQL transaction that fires the immutable history trigger, so\nrecord revisions and audit events are attributed without relying on pooled\nconnection state.
+The console supplies operator context to lifecycle and deadline services.
+Record writes pass actor/reason context through the record repository on the
+same PostgreSQL transaction that fires the immutable history trigger, so\nrecord revisions and audit events are attributed without relying on pooled
+connection state.
 
 ## Deliberate exclusions
 
@@ -73,3 +76,16 @@ reviewable artifact. This avoids turning the administrator UI into a path for
 unreviewed schema/workflow changes.
 
 The console also does not expose or weaken the public API disclosure boundary.
+
+## Deployment role bootstrap and explicit decisions
+
+The Docker entrypoint can derive three server-bound principals from distinct
+Render-generated editor, reviewer, and publisher tokens. The signing secret is
+separate. Editor submits drafts, reviewer requests approval, and publisher
+approves the request and publishes; the requester-cannot-approve constraint
+remains enforced. For named operator identities, set the explicit principal
+JSON array instead. The legacy shared administrator token is ignored.
+
+Approval and rejection forms require an explicit recognized decision; missing,
+misspelled, or forged values cannot default to approval. Relationship review
+also requires the server-bound reviewer role.

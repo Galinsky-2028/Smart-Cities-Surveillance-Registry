@@ -1,4 +1,4 @@
-> **Canonical PR work plan:** [`registry/roadmap.json`](../registry/roadmap.json). The detailed historic instructions below remain authoritative for scope, while all current planned work/PR links must be updated in the canonical registry.
+> **Canonical PR work plan:** [`registry/prs.json`](../registry/prs.json). The detailed historic instructions below remain authoritative for scope, while all current planned work/PR links must be updated in the canonical registry.
 
 # Smart Cities Surveillance Registry — recovered complete development plan
 
@@ -218,3 +218,15 @@ Read these current repository documents before coding; they may describe later i
 ## Recovery confidence
 
 **Full original numbered milestone sequence recovered**, with technical scope and acceptance expanded from available evidence. Precise verbatim wording and the present code→plan mapping still require a separate live reconciliation pass.
+
+## November 2026 completion and release reconciliation
+
+Owner requested completion and deployment of the downstream registry. The
+remaining SC-19 through SC-30 branches are integrated with explicit approval
+validation, separate role credentials, disclosure-safe JSON/Atom feeds, unique
+migration ordering, current patched Next.js, locked dependencies, and actual
+browser/container/source/restore verification. Current PR mappings belong only
+in `registry/prs.json`. Optional provider credentials, editorial source approval,
+external security review, and deployment resource capacity are separate from
+source implementation; none may be represented by synthetic data or invented
+production evidence.

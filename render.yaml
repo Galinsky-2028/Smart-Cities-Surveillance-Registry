@@ -4,7 +4,7 @@ services:
     runtime: docker
     region: ohio
     plan: free
-    repo: https://github.com/neophilism/Smart-Cities-Surveillance-Registry
+    repo: https://github.com/Galinsky-2028/Smart-Cities-Surveillance-Registry
     branch: main
     dockerfilePath: ./Dockerfile
     dockerContext: .
@@ -15,8 +15,16 @@ services:
         sync: false
       - key: DATABASE_URL_UNPOOLED
         sync: false
-      - key: CIVIC_REGISTRY_ADMIN_TOKEN
-        sync: false
+      - key: CIVIC_REGISTRY_ADMIN_SESSION_SECRET
+        generateValue: true
+      - key: CIVIC_REGISTRY_EDITOR_TOKEN
+        generateValue: true
+      - key: CIVIC_REGISTRY_REVIEWER_TOKEN
+        generateValue: true
+      - key: CIVIC_REGISTRY_PUBLISHER_TOKEN
+        generateValue: true
+      - key: SMART_CITIES_PUBLIC_ORIGIN
+        value: https://smart-cities-surveillance-registry.onrender.com
       - key: NODE_ENV
         value: production
       - key: NEXT_TELEMETRY_DISABLED

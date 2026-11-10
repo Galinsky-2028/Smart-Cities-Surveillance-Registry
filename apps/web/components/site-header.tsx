@@ -18,6 +18,7 @@ export function SiteHeader() {
           <Link href="/jurisdictions">
             Jurisdictions
           </Link>
+          <Link href="/follow">Follow</Link>
         </nav>
       </div>
     </header>

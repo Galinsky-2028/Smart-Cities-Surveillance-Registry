@@ -33,5 +33,5 @@ test("rejects unsafe or internal evidence URLs and unrecognized claim fields",()
   assert.throws(()=>retentionProjection({...claim,sourceUrl},scope),/source URL/);
  }
  assert.throws(()=>retentionProjection({...claim,extra:"unreviewed"},scope),/schema/);
- assert.throws(()=>retentionProjection({...claim,policy:"line\\nsecret"},scope),/required/);
+ assert.throws(()=>retentionProjection({...claim,policy:"line\nsecret"},scope),/required/);
 });

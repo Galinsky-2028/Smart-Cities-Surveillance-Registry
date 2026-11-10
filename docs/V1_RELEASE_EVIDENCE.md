@@ -1,35 +1,70 @@
-# Smart Cities v1 release evidence and operator handoff
+# Smart Cities v1 release evidence
 
-**Status: not verified for production release.** This checklist distinguishes source implementation, automated verification, human approvals, deployment and observed production behavior. Open draft PRs are not merged features.
+Source implementation is verified locally; live Render acceptance is recorded
+separately in the release pull request. This document does not claim independent
+human security review, certification, real-world surveillance findings, or
+editorial approval of imported source material.
 
-## Required evidence before release
+## Implemented release scope
 
-- Approved roadmap and mapped pull requests: cross-check the immutable source registry, exact GitHub PR heads and CI jobs.
-- Database migrations and integrity: execute and record migration, restore, authorization and disclosure controls with an isolated test database.
-- Public boundaries: verify cross-registry denial, withheld/redacted field exclusion from API, exports, feeds and analytics, and proper role enforcement.
-- Ingestion provenance: record official source URL, retrieval time, output hash, draft-review state, freshness thresholds and failed-run recovery.
-- Access: keyboard navigation and screen-reader checks; document device/browser support and outstanding defects.
-- Runtime: link a tested deployable image to the exact released commit, health/ready evidence, API/OpenAPI responses, rollback readiness and monitoring.
-- Security: run AI-assisted threat and dependency assessment; mark independent human review as deferred if absent without falsely asserting certification.
-- Owner-gated production changes: obtain only genuine owner action when credentials, money, deployment permissions or irreversible release approval are required.
+- SC-19: existing schema-driven console plus explicit decision validation and
+  server-bound actor roles; missing or malformed decisions cannot approve.
+- SC-20: versioned authenticated provider push/pull contracts, scoped private
+  evidence persistence, transactional retry/conflict handling, and an admin view.
+  Provider statements never authorize publication or prove compliance.
+- SC-21: scoped, deduplicated retention observations and disclosure-projected
+  policy summaries in record pages/API. Reported fulfillment never proves deletion.
+- SC-22: versioned OpenAPI and JSON/NDJSON/CSV exports, including full-page
+  traversal and protection against spreadsheet formula injection.
+- SC-23: public JSON Feed 1.1 and Atom 1.0, reader subscription guidance, and
+  operator-managed notification subscriptions. Email/webhooks require providers.
+- SC-24/25: persisted source freshness/health views and public disclosure/citation
+  coverage analytics, including uncited record counts.
+- SC-26: principal-bound/revocable signed sessions, explicit role decisions,
+  bounded login/PDF handling, DNS-pinned source fetch, content-addressed storage
+  verification, hardened responses, and patched production dependencies.
+- SC-27: keyboard skip navigation, accessible search/page feedback, visible mobile
+  navigation, contrast/reduced-motion styles, and a bounded local load probe.
+- SC-28/29/30: pinned deployable non-root container, direct migration connection,
+  idempotent configuration bootstrap, readiness/API probes, restore rehearsal,
+  operator/recovery instructions, and canonical roadmap reconciliation.
 
-## Open change packages needing integration
+## Executed evidence
 
-- SC-19: publication review console and server decision validation are unfinished.
-- SC-20: scoped external claim validation exists in draft PR #34; provider API/auth/audit persistence still missing.
-- SC-21: sourced retention/deletion projection in draft PR #35; no proof of physical deletion or live UI.
-- SC-22: CSV formula hardening in draft PR #36; complete exports/OpenAPI contract verification pending.
-- SC-23: public feed route blocked by Boardroom dynamic-path write validation; no merged implementation.
-- SC-24: freshness projection in draft PR #37; production observations/UI missing.
-- SC-25: uncited analytics metric in draft PR #38; UI route edit blocked by path validation.
-- SC-26: public API security headers in draft PR #39; security acceptance not complete.
-- SC-27: keyboard accessibility patch in draft PR #40; manual assistive verification pending.
-- SC-28: readiness probe and runbook in draft PR #41; no production deploy verified.
-- SC-29: read-only release smoke in draft PR #42; full E2E and production validation pending.
-- SC-30: documentation only; a source document cannot certify or trigger release.
+- Node 24, PostgreSQL 18: full lint, typecheck, unit/integration tests and
+  optimized Next.js 16.4.6 build. See PR checks for exact final test totals.
+- Production dependency audit: zero reported advisories at verification time.
+- Exact production Dockerfile builds without database credentials and runs as
+  the non-root `node` user. Runtime migrates and installs configuration before
+  binding the production port.
+- Chromium desktop/mobile: public overview/search, jurisdiction explorer,
+  analytics, record detail/evidence/history, feeds, and protected administration.
+  Keyboard skip target, accessibility tree landmarks, mobile overflow/navigation,
+  and distinct editor/reviewer/publisher publication were exercised. Editor role
+  escalation and reviewer self-approval were denied.
+- Local synthetic dataset: 266 records. A 20-request search probe at concurrency
+  two completed without failures (observed p50 about 42 ms and p95 about 74 ms).
+  These are local fixture timings, not production capacity claims.
+- A PostgreSQL dump restored into a separate database retained a valid
+  cryptographic audit chain. Production backups still need an operating schedule.
+- TLS-fetched official NYPD POST Act catalog: 43 links, 42 distinct policy PDFs.
+  Dry-run ingestion validated all 42 with zero failures. This uncovered and fixed
+  long-filename ID collisions and repeated-link handling. No PDF bytes were
+  archived and no real-source records were published.
 
-This is a dated implementation handoff, not a certification or declaration of a working production deployment. Verify all PR states anew before relying on this report.
+## Deployment and operating boundaries
 
-## Recovery procedure
+Production starts with configuration and zero published records. Never load the
+fictional Harborview dataset into the live registry. The official pilot remains
+opt-in and disabled until editorial approval. Source policies do not establish
+specific surveillance deployments. Configure durable evidence storage before
+fetching PDFs, provider credentials before compliance integration, email relay
+before mail delivery, and scheduled workers before claiming freshness guarantees.
 
-Reconcile mapped PR heads and actual required checks. Classify failures from runner diagnostics. Make narrow commits through approved source controls, then rerun current-head checks. Hold PRs as draft while acceptance is incomplete. A pending test, missing provider credential, or blocked path should be checkpointed and yielded to an independent eligible task. Do not bypass required checks or production approval.
+The existing Neon project is used through an isolated `render-live` branch;
+normal account-plan billing applies. A new Render service needs one available
+workspace resource slot. Live deployment requires its exact source commit,
+Render deploy status `live`, successful readiness and public API/feed responses,
+and runtime error-log inspection. Source checks alone cannot establish that.
+
+Independent human review and certification remain deferred under owner policy.

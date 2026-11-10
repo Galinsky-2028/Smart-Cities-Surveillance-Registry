@@ -1,6 +1,7 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
+import { parseAdminDecision } from "../../lib/admin-decision";
 
 import { compileRegistryConfig } from "@civic-registry/config";
 import type {
@@ -447,10 +448,7 @@ export async function decideAdminTransition(
     await service.decideTransition({
       registryId,
       requestId: text(formData, "requestId"),
-      decision:
-        text(formData, "decision") === "rejected"
-          ? "rejected"
-          : "approved",
+      decision: parseAdminDecision(text(formData, "decision")),
       actorId: session.actorId,
       actorRoles: session.roles,
       note: text(formData, "note") || undefined,
@@ -1005,11 +1003,7 @@ export async function reviewAdminRelationshipCandidate(
     formData,
     "candidateId",
   );
-  const decision =
-    text(formData, "decision") ===
-      "rejected"
-      ? "rejected"
-      : "approved";
+  let decision: "approved" | "rejected" = "rejected";
   const returnTo = safeReturnTo(
     text(formData, "returnTo"),
     "/admin/registries/" +
@@ -1019,6 +1013,10 @@ export async function reviewAdminRelationshipCandidate(
   let failure: string | undefined;
 
   try {
+    decision = parseAdminDecision(text(formData, "decision"));
+    if (!session.roles.includes("reviewer")) {
+      throw new Error("A reviewer role is required to review relationship candidates.");
+    }
     await getRepositories()
       .relationshipCandidates.review({
         registryId,
