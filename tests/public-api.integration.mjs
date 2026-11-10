@@ -1,3 +1,4 @@
+import { handlePublicFeed } from "../apps/web/lib/public-feed.ts";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -7,6 +8,9 @@ import {
 } from "../packages/config/src/index.ts";
 import {
   createDatabasePool,
+  PostgresDisclosureRepository,
+  PostgresRecordRepository,
+  PostgresRegistryConfigRepository,
   runMigrations,
   seedRegistry,
 } from "../packages/database/src/index.ts";
@@ -46,7 +50,7 @@ const seed = JSON.parse(
   ),
 );
 
-async function setup() {
+async function setup(additionalRecords = []) {
   const pool = createDatabasePool({
     connectionString: databaseUrl,
     applicationName:
@@ -60,7 +64,7 @@ async function setup() {
   await seedRegistry(
     pool,
     config,
-    seed,
+    { ...seed, records: [...seed.records, ...additionalRecords] },
   );
 
   return pool;
@@ -80,6 +84,9 @@ test("versioned registry endpoints expose only public policy metadata", async ()
       await listResponse.json();
 
     assert.equal(listResponse.status, 200);
+    assert.equal(listResponse.headers.get("X-Content-Type-Options"), "nosniff");
+    assert.equal(listResponse.headers.get("Referrer-Policy"), "no-referrer");
+    assert.equal(listResponse.headers.get("X-Frame-Options"), "DENY");
     assert.equal(
       listResponse.headers.get(
         "X-API-Version",
@@ -392,4 +399,74 @@ test("versioned errors use one machine-readable envelope", async () => {
   } finally {
     await pool.end();
   }
+});
+
+test("partial final export pages preserve record identity without duplicates or private rows", async () => {
+  const template = seed.records.find(record => record.recordTypeId === "organization");
+  const publicRecords = Array.from({ length: 210 }, (_, index) => ({
+    ...template,
+    id: `paging-${String(index).padStart(3, "0")}`,
+    fields: { ...template.fields, name: `Paging ${String(index).padStart(3, "0")}` },
+  }));
+  const privateRecord = { ...template, id: "paging-private", visibility: "private",
+    fields: { ...template.fields, name: "Paging PRIVATE VALUE" } };
+  const pool = await setup([...publicRecords, privateRecord]);
+  try {
+    const allIds = [template.id, ...publicRecords.map(record => record.id)];
+    for (const limit of [99, 100, 101, 150, 200, 211, 250]) {
+      const response = await handleApiExport(new Request(
+        `http://registry.test/api/v1/registries/public-document-catalog/export?type=organization&sort=field:name&order=asc&maxRecords=${limit}`,
+      ), "public-document-catalog");
+      assert.equal(response.status, 200);
+      const body = await response.json();
+      assert.deepEqual(body.records.map(record => record.id), allIds.slice(0, limit));
+      assert.equal(new Set(body.records.map(record => record.id)).size, body.exported);
+      assert.equal(body.total, allIds.length);
+      assert.equal(body.exported, Math.min(limit, allIds.length));
+      assert.equal(body.truncated, limit < allIds.length);
+      assert.equal(response.headers.get("X-Export-Count"), String(body.exported));
+      assert.equal(response.headers.get("X-Export-Truncated"), String(body.truncated));
+      assert.ok(!JSON.stringify(body).includes("Paging PRIVATE VALUE"));
+    }
+    for (const value of ["", "1.5", "1garbage", "1e2", "-1", "10001"]) {
+      const response = await handleApiExport(new Request(
+        `http://registry.test/api/v1/registries/public-document-catalog/export?maxRecords=${encodeURIComponent(value)}`,
+      ), "public-document-catalog");
+      assert.equal(response.status, 400);
+      assert.equal((await response.json()).error.code, "invalid_export_limit");
+    }
+  } finally { await pool.end(); }
+});
+
+
+
+test("public feeds exclude drafts and redacted fields and escape Atom markup", async () => {
+  const source = seed.records.find(record => record.recordTypeId === "document");
+  const secret = { ...source, id: "feed-draft", status: "draft",
+    fields: { ...source.fields, title: "DRAFT-FEED-SECRET" } };
+  const visible = { ...source, id: "feed-public", fields: { ...source.fields,
+    title: 'Visible <tag> & "record"', summary: "REDACT-THIS-SUMMARY" } };
+  const pool = await setup([secret, visible]);
+  try {
+    const configs = new PostgresRegistryConfigRepository(pool);
+    const records = new PostgresRecordRepository(pool, configs);
+    const disclosure = new PostgresDisclosureRepository(pool, configs, records);
+    await disclosure.setFieldDisclosure({ registryId: config.registry.id, recordId: visible.id,
+      fieldId: "summary", disposition: "withheld", actorId: "feed-reviewer",
+      updatedAt: "2026-11-01T00:00:00.000Z" });
+    const url = "https://registry.example/api/v1/registries/public-document-catalog/feed";
+    const json = await handlePublicFeed(new Request(url), config.registry.id);
+    assert.equal(json.status, 200);
+    assert.match(json.headers.get("content-type"), /feed\+json/);
+    assert.equal(json.headers.get("cache-control"), "no-store");
+    const text = await json.text();
+    assert.doesNotMatch(text, /DRAFT-FEED-SECRET|REDACT-THIS-SUMMARY/);
+    assert.ok(JSON.parse(text).items.some(item => item.title === visible.fields.title));
+    const atom = await handlePublicFeed(new Request(url + "?format=atom"), config.registry.id);
+    const xml = await atom.text();
+    assert.match(xml, /Visible &lt;tag&gt; &amp; &quot;record&quot;/);
+    assert.doesNotMatch(xml, /DRAFT-FEED-SECRET|REDACT-THIS-SUMMARY|<tag>/);
+    assert.equal((await handlePublicFeed(new Request(url), "other-registry")).status, 404);
+    assert.equal((await handlePublicFeed(new Request(url + "?format=html"), config.registry.id)).status, 400);
+  } finally { await pool.end(); }
 });

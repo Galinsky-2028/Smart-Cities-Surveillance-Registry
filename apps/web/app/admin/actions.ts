@@ -1,6 +1,7 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
+import { parseAdminDecision } from "../../lib/admin-decision";
 
 import { compileRegistryConfig } from "@civic-registry/config";
 import type {
@@ -25,7 +26,6 @@ import {
   clearAdminSession,
   establishAdminSession,
   requireAdminSession,
-  verifyAdminAccessToken,
 } from "../../lib/admin-auth";
 import { parseAdminRecordFields } from "../../lib/admin-record";
 import { assertSmartCitiesPublicRecordSafe } from "../../lib/smart-cities-public-safety";
@@ -145,30 +145,18 @@ export async function signInAdmin(
   formData: FormData,
 ): Promise<void> {
   const token = text(formData, "token");
-  const actorId = text(formData, "actorId");
-  const roles = csv(text(formData, "roles"));
-
-  if (!verifyAdminAccessToken(token)) {
+  try {
+    await establishAdminSession(token);
+  } catch {
     redirect(
       destination(
         "/admin/sign-in",
         "error",
-        "Administrator access token is invalid.",
+        "Administrator credentials are invalid or the console is disabled.",
       ),
     );
   }
 
-  if (!actorId) {
-    redirect(
-      destination(
-        "/admin/sign-in",
-        "error",
-        "Actor ID is required.",
-      ),
-    );
-  }
-
-  await establishAdminSession(actorId, roles);
   redirect("/admin");
 }
 
@@ -460,10 +448,7 @@ export async function decideAdminTransition(
     await service.decideTransition({
       registryId,
       requestId: text(formData, "requestId"),
-      decision:
-        text(formData, "decision") === "rejected"
-          ? "rejected"
-          : "approved",
+      decision: parseAdminDecision(text(formData, "decision")),
       actorId: session.actorId,
       actorRoles: session.roles,
       note: text(formData, "note") || undefined,
@@ -1018,11 +1003,7 @@ export async function reviewAdminRelationshipCandidate(
     formData,
     "candidateId",
   );
-  const decision =
-    text(formData, "decision") ===
-      "rejected"
-      ? "rejected"
-      : "approved";
+  let decision: "approved" | "rejected" = "rejected";
   const returnTo = safeReturnTo(
     text(formData, "returnTo"),
     "/admin/registries/" +
@@ -1032,6 +1013,10 @@ export async function reviewAdminRelationshipCandidate(
   let failure: string | undefined;
 
   try {
+    decision = parseAdminDecision(text(formData, "decision"));
+    if (!session.roles.includes("reviewer")) {
+      throw new Error("A reviewer role is required to review relationship candidates.");
+    }
     await getRepositories()
       .relationshipCandidates.review({
         registryId,

@@ -17,7 +17,7 @@ and installs only the verified schema configuration on first boot.
    `render.yaml` configures an Ohio Docker service and deploys only after
    the main-branch checks pass.
 2. Set `DATABASE_URL` to the existing Neon project's **pooled** TLS
-   connection string, for normal application requests. Set
+   connection string, for normal application requests (use `sslmode=verify-full`). Set
    `DATABASE_URL_UNPOOLED` to the **direct** TLS connection string for
    the **same database and role**. Both values stay solely in Render's secret
    environment configuration. Do not publish, commit, or log them.
@@ -25,9 +25,15 @@ and installs only the verified schema configuration on first boot.
    lock**; a PgBouncer transaction-pooling connection does not preserve
    backend-session state across its statements. The Docker entrypoint
    deliberately refuses to run without a direct migration connection.
-3. Set `CIVIC_REGISTRY_ADMIN_TOKEN` to a strong random secret. The built-in
-   console uses a shared administrator token; for production operator access,
-   put `/admin` behind trusted identity-aware access control/SSO as well.
+3. Render generates an independent `CIVIC_REGISTRY_ADMIN_SESSION_SECRET` and
+   three distinct role credentials: `CIVIC_REGISTRY_EDITOR_TOKEN`,
+   `CIVIC_REGISTRY_REVIEWER_TOKEN`, and `CIVIC_REGISTRY_PUBLISHER_TOKEN`.
+   Retrieve role credentials privately from Render's Environment page. Startup
+   derives server-side principal digests; the sign-in form cannot select roles
+   or identity. The reviewer requests approval and a separate publisher approves
+   and publishes. Do not share credentials between operators. For a team, replace
+   the role accounts with named `CIVIC_REGISTRY_ADMIN_PRINCIPALS` as described in
+   the operator guide, and apply organization access controls where required.
 4. Start the service. Its Docker startup command uses the direct DB URL for `pnpm db:migrate` followed
    by `pnpm db:bootstrap-config`, then binds Next.js to `0.0.0.0:$PORT`.
 5. Confirm `GET /api/health` responds (process liveness), and
@@ -71,3 +77,18 @@ canonical evidence and prior versions, and must never auto-publish imported
 records. Configuration changes after initial installation require explicit
 review; bootstrapping intentionally refuses to silently overwrite an
 installed registry configuration with a different schema version.
+
+## Resource capacity
+
+A separate web service requires one available Render resource slot. Do not
+replace another application's service or delete its database to bypass a
+workspace limit. The existing Smart Cities Neon project is reused, with an
+isolated `render-live` branch capped at 0.25 CU and five-minute idle suspension.
+Neon's existing account plan and normal usage billing apply. A free Render web
+service does not provide persistent evidence-file storage or always-on workers.
+
+The production `SMART_CITIES_PUBLIC_ORIGIN` must match the actual Render URL;
+update it if Render assigns a different hostname. Public feeds are available at
+`/api/v1/registries/smart-cities-surveillance-registry/feed` (JSON Feed 1.1), or
+append `?format=atom` for Atom 1.0. `/follow` explains subscription and withdrawal
+limitations. Feeds expose only the latest 50 currently public records.

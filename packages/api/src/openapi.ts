@@ -179,6 +179,19 @@ export function buildPublicApiOpenApiDocument(
       { name: "Exports" },
     ],
     paths: {
+      "/registries/{registryId}/feed": {
+        get: {
+          summary: "Follow the latest 50 disclosure-filtered public records",
+          parameters: [registryIdParameter, { name: "format", in: "query", schema: { type: "string", enum: ["json", "atom"], default: "json" } }],
+          responses: {
+            "200": { description: "JSON Feed 1.1 or Atom 1.0; private and unpublished records excluded", content: {
+              "application/feed+json": { schema: { type: "object" } },
+              "application/atom+xml": { schema: { type: "string" } },
+            } },
+            "404": { description: "Public registry not found" },
+          },
+        },
+      },
       "/registries": {
         get: {
           ...publicGet(

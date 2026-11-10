@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import {
   extractLinks,
   type SourceAdapter,
@@ -101,6 +102,7 @@ export function createHtmlDocumentCatalogAdapter(
         startUrls.length,
       );
       const rows = [];
+      const seenDocuments = new Set<string>();
       const sourcePages: string[] = [];
       const warnings = [];
 
@@ -168,6 +170,10 @@ export function createHtmlDocumentCatalogAdapter(
 
           const url =
             new URL(link.href);
+          if (url.protocol !== "https:" || url.username || url.password) continue;
+          url.hash = "";
+          if (seenDocuments.has(url.href)) continue;
+          seenDocuments.add(url.href);
           const fallbackTitle =
             url.pathname
               .split("/")
@@ -193,16 +199,12 @@ export function createHtmlDocumentCatalogAdapter(
             linkText && !genericLinkText
               ? linkText
               : filenameTitle || "Public document";
-          const externalId =
-            url.pathname +
-            url.search;
-          const id =
-            stableSlug(
-              config.id +
-                "-" +
-                externalId,
-            ) ||
-            stableSlug(title);
+          const externalId = url.href;
+          // A truncated filename slug collides for long official policy names.
+          // Bind identity to the complete canonical URL, independently of title
+          // changes, document order, and repeated catalog anchors.
+          const digest = createHash("sha256").update(config.id + ":" + externalId).digest("hex").slice(0, 32);
+          const id = `${stableSlug(config.id).slice(0, 60)}-${digest}`;
 
           rows.push({
             id,
