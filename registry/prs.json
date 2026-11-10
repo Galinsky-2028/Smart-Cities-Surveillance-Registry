@@ -2,13 +2,14 @@
   "repository": "Galinsky-2028/Smart-Cities-Surveillance-Registry",
   "title": "Smart-Cities-Surveillance-Registry",
   "planVerified": true,
-  "plannedPrCount": 30,
+  "plannedPrCount": 31,
   "sourceFiles": [
-    "docs/DEVELOPMENT_PLAN.md"
+    "docs/DEVELOPMENT_PLAN.md",
+    "docs/BILL-EXPERIENCE.md"
   ],
   "schemaVersion": 1,
-  "roadmapVersion": 2,
-  "observedAt": "2026-11-10T00:25:01.863Z",
+  "roadmapVersion": 3,
+  "observedAt": "2026-11-10T01:04:06.505Z",
   "units": [
     {
       "id": "SC-01",
@@ -382,23 +383,53 @@
       "externalDependencies": [],
       "externalPrerequisites": [],
       "mappingEvidence": "Feature source integrated and verified together by PR #45; deployment acceptance is tracked separately in release evidence."
+    },
+    {
+      "id": "SC-31",
+      "title": "Bill-led demonstration and real-world evidence explorer",
+      "origin": "addition",
+      "prs": [
+        47
+      ],
+      "mappingEvidence": "Owner-approved presentation specification in docs/BILL-EXPERIENCE.md; implementation and acceptance evidence in GitHub PR #47.",
+      "dependsOn": [
+        "SC-09",
+        "SC-27"
+      ],
+      "externalDependencies": [],
+      "externalPrerequisites": []
     }
   ],
   "pullRequests": [
+    {
+      "id": 5233873862,
+      "number": 47,
+      "title": "SC-31: Add bill-led demonstration and real-world evidence explorer",
+      "url": "https://github.com/Galinsky-2028/Smart-Cities-Surveillance-Registry/pull/47",
+      "state": "open",
+      "draft": false,
+      "createdAt": "2026-11-10T01:03:46Z",
+      "updatedAt": "2026-11-10T01:03:46Z",
+      "closedAt": null,
+      "mergedAt": null,
+      "headSha": "a87076ac595888206cf7e86827f75eb60a606ee2",
+      "baseRef": "main",
+      "mergeCommitSha": "cc579ea017341adad6e3ebf337b1e153eec1ad52"
+    },
     {
       "id": 5233496969,
       "number": 46,
       "title": "SC-23/SC-28: Use the assigned Render deployment URL",
       "url": "https://github.com/Galinsky-2028/Smart-Cities-Surveillance-Registry/pull/46",
-      "state": "open",
+      "state": "closed",
       "draft": false,
       "createdAt": "2026-11-10T00:24:24Z",
-      "updatedAt": "2026-11-10T00:24:24Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "headSha": "91ad15f84a9fe57db848263ea4e81b21932f1d5d",
+      "updatedAt": "2026-11-10T00:27:51Z",
+      "closedAt": "2026-11-10T00:27:47Z",
+      "mergedAt": "2026-11-10T00:27:47Z",
+      "headSha": "6476ace55b04d7d425151bf46cd9ea1ed2b4a097",
       "baseRef": "main",
-      "mergeCommitSha": "04b41c45785792a6e7d16b63c85ff996dc57047a"
+      "mergeCommitSha": "73a14abc1ec5e07d57633830c855117cbecab61a"
     },
     {
       "id": 5233327633,
