@@ -1,5 +1,5 @@
 {
-  "repository": "neophilism/Smart-Cities-Surveillance-Registry",
+  "repository": "Galinsky-2028/Smart-Cities-Surveillance-Registry",
   "deprecated": true,
   "redirectTo": "registry/prs.json",
   "instructions": "Retired duplicate; consume registry/prs.json directly."
