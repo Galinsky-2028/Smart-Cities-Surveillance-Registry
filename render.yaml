@@ -24,7 +24,7 @@ services:
       - key: CIVIC_REGISTRY_PUBLISHER_TOKEN
         generateValue: true
       - key: SMART_CITIES_PUBLIC_ORIGIN
-        value: https://smart-cities-surveillance-registry.onrender.com
+        value: https://smart-cities-surveillance-registry-gbzz.onrender.com
       - key: NODE_ENV
         value: production
       - key: NEXT_TELEMETRY_DISABLED
