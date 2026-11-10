@@ -97,7 +97,7 @@ export default async function RecordsPage({
     <main className="page-shell">
       <Breadcrumbs
         items={[
-          { label: "Registries", href: "/" },
+          { label: "Real-world evidence", href: "/explore" },
           {
             label: registry.config.definition.name,
             href: `/registries/${encodeURIComponent(registryId)}`,

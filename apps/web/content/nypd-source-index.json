@@ -1,0 +1,262 @@
+{
+  "publisher": "New York City Police Department",
+  "catalogTitle": "NYPD POST Act impact-and-use policy catalog",
+  "catalogUrl": "https://www.nyc.gov/site/nypd/about/about-nypd/policy/post-act.page",
+  "retrievedAt": "2026-11-10T00:52:34.506Z",
+  "sourceSha256": "9f400f3da4dc9270564d2f7bacf92b61206830b952502430311db3a1d22651d8",
+  "coverage": "Official catalog link metadata only. Document contents, adoption, current validity, deployments, and compliance have not been assessed.",
+  "documents": [
+    {
+      "id": "ad4df3115f73ca0020b3",
+      "label": "audio only recording devices covert nypd impact and use policy 2.4.26 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/audio-only-recording-devices-covert-nypd--impact-and-use-policy_2.4.26_final.pdf",
+      "filename": "audio-only-recording-devices-covert-nypd--impact-and-use-policy_2.4.26_final.pdf"
+    },
+    {
+      "id": "156bcc9a783d5515938b",
+      "label": "audio only recording devices overt nypd impact and use policy 2.4.26 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/audio-only-recording-devices-overt-nypd--impact-and-use-policy_2.4.26_final.pdf",
+      "filename": "audio-only-recording-devices-overt-nypd--impact-and-use-policy_2.4.26_final.pdf"
+    },
+    {
+      "id": "5e10f1a47655fe2c0b00",
+      "label": "audiovisual recording devices covert nypd Impact and use policy 2.4.26 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/audiovisual-recording-devices-covert_nypd-Impact-and-use-policy_2.4.26_final.pdf",
+      "filename": "audiovisual-recording-devices-covert_nypd-Impact-and-use-policy_2.4.26_final.pdf"
+    },
+    {
+      "id": "09612c02b64e164e0035",
+      "label": "audiovisual recording devices overt nypd Impact and use policy 2.4.26 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/audiovisual-recording-devices-overt_nypd-Impact-and-use-policy_2.4.26_final.pdf",
+      "filename": "audiovisual-recording-devices-overt_nypd-Impact-and-use-policy_2.4.26_final.pdf"
+    },
+    {
+      "id": "d1713358ff5c9172c782",
+      "label": "body worn cameras nypd Impact and use policy 2.4.26 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/body-worn-cameras-nypd-Impact-and-use-policy_2.4.26_final.pdf",
+      "filename": "body-worn-cameras-nypd-Impact-and-use-policy_2.4.26_final.pdf"
+    },
+    {
+      "id": "fb4753e5bc2e5ff5ee81",
+      "label": "CALEA nypd impact and use policy 2.4.26 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/CALEA-nypd-impact-and-use-policy_2.4.26_final.pdf",
+      "filename": "CALEA-nypd-impact-and-use-policy_2.4.26_final.pdf"
+    },
+    {
+      "id": "e23330374e6f251b255c",
+      "label": "case management system nypd impact and use policy 2.4.26 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/case-management-system-nypd-impact-and-use-policy-2.4.26-final.pdf",
+      "filename": "case-management-system-nypd-impact-and-use-policy-2.4.26-final.pdf"
+    },
+    {
+      "id": "22418ac55b262e28c12e",
+      "label": "CCTV  Systems NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/CCTV%20-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "CCTV -Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "68bd7f3a4ddb959d804a",
+      "label": "Cell Site Simulators NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Cell-Site-Simulators-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Cell-Site-Simulators-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "6314e0dfebccee416115",
+      "label": "Criminal Group Database NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Criminal-Group-Database-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Criminal-Group-Database-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "c43e0c2cdc5bb80a2367",
+      "label": "Cryptocurrency Analysis Tools NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Cryptocurrency-Analysis-Tools-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Cryptocurrency-Analysis-Tools-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "59cb538333633d71d9ba",
+      "label": "Data Analysis Tools NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Data-Analysis-Tools-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Data-Analysis-Tools-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "449766d21e261c6f5460",
+      "label": "Digital Cameras NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Digital-Cameras-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Digital-Cameras-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "13c571e5c8097aa1c13d",
+      "label": "Digital Fingerprint Scanning Devices NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Digital-Fingerprint-Scanning-Devices-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Digital-Fingerprint-Scanning-Devices-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "8aea0db7e1f9674507e3",
+      "label": "Digital Forensic Access Tools NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Digital-Forensic-Access-Tools-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Digital-Forensic-Access-Tools-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "1ed878c40825c2b32979",
+      "label": "Domain Awareness System NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Domain-Awareness-System-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Domain-Awareness-System-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "5e89ab2a4839f7bb82ed",
+      "label": "Drone Detection Systems NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Drone-Detection-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Drone-Detection-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "c07fd4bac6047d292853",
+      "label": "Electronic Record Management Systems NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Electronic-Record-Management-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Electronic-Record-Management-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "5b4119e03219ff6aa935",
+      "label": "Facial Recognition NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Facial-Recognition-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Facial-Recognition-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "15c14a3bdb7c49f1e0a0",
+      "label": "GPS Tracking Devices NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/GPS-Tracking-Devices-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "GPS-Tracking-Devices-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "d8a13d4de96628c6004e",
+      "label": "Internet Attribution Management NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Internet-Attribution-Management-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Internet-Attribution-Management-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "adecad8a8657aa0acc29",
+      "label": "Iris Recognition NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Iris-Recognition-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Iris-Recognition-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "cd0c60271d924d205dde",
+      "label": "License Plate Readers NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/License-Plate-Readers-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "License-Plate-Readers-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "633b2bd38089210c8c5b",
+      "label": "Manned Aircraft Systems NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Manned-Aircraft-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Manned-Aircraft-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "cc576d0db401ab348615",
+      "label": "Media Aggregation Services NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Media-Aggregation-Services-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Media-Aggregation-Services-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "44072cf8c4e1557603ac",
+      "label": "Mobile X Ray Technology NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Mobile-X-Ray-Technology-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Mobile-X-Ray-Technology-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "084b655c62859452c046",
+      "label": "Portable Electronics Devices NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Portable-Electronics-Devices-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Portable-Electronics-Devices-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "ed70c36f6180864fc4f2",
+      "label": "Projectile GPS Tracking Device NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Projectile-GPS-Tracking-Device-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Projectile-GPS-Tracking-Device-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "8d7728577ab3beec0a96",
+      "label": "Remote Control Robots Submersible NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Remote-Control-Robots-Submersible-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Remote-Control-Robots-Submersible-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "7ee02687d530244f79d6",
+      "label": "Remote Control Robots Throwbots NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Remote-Control-Robots-Throwbots-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Remote-Control-Robots-Throwbots-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "914559588390b051aafa",
+      "label": "Remote Controlled Robots Tactical NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Remote-Controlled-Robots-Tactical-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Remote-Controlled-Robots-Tactical-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "7ed32c0463bf425178b6",
+      "label": "ShotSpotter NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/ShotSpotter-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "ShotSpotter-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "c74652d9fbeb8f17ea3d",
+      "label": "Situational Awareness Cameras NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Situational-Awareness-Cameras-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Situational-Awareness-Cameras-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "e62a47d2f807f8851a71",
+      "label": "situational awareness cameras nypd impact and use policy 4.11.23 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/situational-awareness-cameras-nypd-impact-and-use-policy_4.11.23_final.pdf",
+      "filename": "situational-awareness-cameras-nypd-impact-and-use-policy_4.11.23_final.pdf"
+    },
+    {
+      "id": "840668c1d073816e8457",
+      "label": "Social Network Analysis Tools NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Social-Network-Analysis-Tools-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Social-Network-Analysis-Tools-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "18ea64a10c301f28703b",
+      "label": "Thermographic Cameras NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Thermographic-Cameras-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Thermographic-Cameras-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "72694764c262648a82d9",
+      "label": "transaction intercept tool impact use policy 3 3 26 final",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/transaction-intercept-tool-impact-use-policy-3-3-26-final.pdf",
+      "filename": "transaction-intercept-tool-impact-use-policy-3-3-26-final.pdf"
+    },
+    {
+      "id": "97ee879f5de53d32a00e",
+      "label": "Unmanned Aircraft Systems NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Unmanned-Aircraft-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Unmanned-Aircraft-Systems-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "e578268389d1c21bf195",
+      "label": "Vehicle Mounted Cameras NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Vehicle-Mounted-Cameras-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Vehicle-Mounted-Cameras-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "9a10bff761a7004c5f62",
+      "label": "Video Only Recording Device Covert NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Video-Only-Recording-Device-Covert-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Video-Only-Recording-Device-Covert-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "1460e5e2cfb6a3d574bd",
+      "label": "Video Only Recording Devices Overt NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Video-Only-Recording-Devices-Overt-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Video-Only-Recording-Devices-Overt-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    },
+    {
+      "id": "3fb261ed3f1ab5d03d60",
+      "label": "Wifi Geolocation Tracking Devices NYPD Impact and Use Policy 2.4.26 FINAL",
+      "url": "https://www.nyc.gov/assets/nypd/downloads/pdf/public_information/post-final/Wifi-Geolocation-Tracking-Devices-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf",
+      "filename": "Wifi-Geolocation-Tracking-Devices-NYPD-Impact-and-Use-Policy-2.4.26-FINAL.pdf"
+    }
+  ]
+}

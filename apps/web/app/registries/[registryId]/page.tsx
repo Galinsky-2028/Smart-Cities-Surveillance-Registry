@@ -47,7 +47,7 @@ export default async function RegistryPage({
     <main className="page-shell">
       <Breadcrumbs
         items={[
-          { label: "Registries", href: "/" },
+          { label: "Real-world evidence", href: "/explore" },
           { label: definition.name },
         ]}
       />
