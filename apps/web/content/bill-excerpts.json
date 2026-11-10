@@ -1,0 +1,26 @@
+{
+  "sourceTitle": "ALL DOCS - Smart Cities & Surveillance Accountability Act of 2025.docx",
+  "textScope": "Bill Text through section 204; supporting commentary excluded",
+  "extractedTextSha256": "3c416e8b875351b8a8b6baf10bfbc05d21f5ac9d106d88888ef25a4856247c12",
+  "quotes": {
+    "approval": [
+      "These documents must be made publicly available at least 30 days prior to any decision by the governing authority on whether to approve the technology’s use."
+    ],
+    "inventory": [
+      "This inventory should be updated at least quarterly."
+    ],
+    "reporting": [
+      "The report shall be completed and made public within 90 days after the end of each calendar year (or fiscal year, if specified by the jurisdiction) in which the surveillance technology was used.",
+      "(c) Publishing and Retention of Reports: Annual Surveillance Reports, once finalized and presented, shall be kept publicly accessible (e.g., on the agency’s website or a municipal open data portal) for a minimum of 5 years, so that trends and changes can be tracked over time by researchers, oversight bodies, or interested residents."
+    ],
+    "lookback": [
+      "(a) Inventory and Compliance Plan for Pre-Existing Technologies: Within 180 days (6 months) of this Act’s enactment, each government entity shall conduct a comprehensive review and inventory of all surveillance technologies that it deployed or utilized in public spaces during the ten-year lookback period (as defined in Section 3) and that it intends to continue using."
+    ],
+    "policy": [
+      "(a) Data Retention Limits: Except as provided in subsection (b) or as otherwise required by law, any personal data collected by a surveillance technology (including images, recordings, identification information, or metadata) that has not been affirmatively determined to be relevant to an ongoing investigation or proceeding shall be permanently deleted or rendered permanently irretrievable by the government entity no later than 30 days after its collection."
+    ],
+    "judicial": [
+      "(a) Requirement of a Court Order for Targeted Surveillance: A government entity may not use a surveillance technology to engage in targeted surveillance of an individual (or a group of individuals) in public spaces, nor access or acquire personal data from or through a surveillance technology concerning a particular person, without first obtaining a warrant issued by a duly authorized court."
+    ]
+  }
+}

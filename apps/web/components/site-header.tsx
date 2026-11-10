@@ -14,7 +14,9 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav aria-label="Primary navigation">
-          <Link href="/">Registry</Link>
+          <Link href="/demo">Demonstration</Link>
+          <Link href="/explore">Real-world evidence</Link>
+          <Link href="/bill">The proposed Act</Link>
           <Link href="/jurisdictions">
             Jurisdictions
           </Link>
