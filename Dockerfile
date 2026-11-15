@@ -12,4 +12,4 @@ RUN mkdir -p /app/data/documents && chown -R node:node /app
 USER node
 
 EXPOSE 10000
-CMD ["sh", "-c", "set -eu; CIVIC_REGISTRY_ADMIN_PRINCIPALS=\"$(node scripts/admin-principals.mjs)\"; export CIVIC_REGISTRY_ADMIN_PRINCIPALS; if [ -z \"${DATABASE_URL_UNPOOLED:-}\" ]; then echo >&2 \"DATABASE_URL_UNPOOLED is required for session-safe migrations\"; exit 1; fi; DATABASE_URL=\"$DATABASE_URL_UNPOOLED\" pnpm db:migrate && DATABASE_URL=\"$DATABASE_URL_UNPOOLED\" pnpm db:bootstrap-config && exec pnpm --filter @smart-cities-surveillance-registry/web exec next start --hostname 0.0.0.0 --port ${PORT:-10000}"]
+CMD ["sh", "-c", "set -eu; CIVIC_REGISTRY_ADMIN_PRINCIPALS=\"$(node scripts/admin-principals.mjs)\"; export CIVIC_REGISTRY_ADMIN_PRINCIPALS; if [ -z \"${DATABASE_URL_UNPOOLED:-}\" ]; then echo >&2 \"DATABASE_URL_UNPOOLED is required for session-safe migrations\"; exit 1; fi; DATABASE_URL=\"$DATABASE_URL_UNPOOLED\" pnpm db:migrate && DATABASE_URL=\"$DATABASE_URL_UNPOOLED\" pnpm db:bootstrap-config && cd apps/web && exec node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port ${PORT:-10000}"]

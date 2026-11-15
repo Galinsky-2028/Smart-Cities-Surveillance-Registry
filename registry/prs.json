@@ -350,12 +350,13 @@
       "prs": [
         41,
         45,
-        46
+        46,
+        48
       ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": [],
-      "mappingEvidence": "Feature source integrated and verified together by PR #45; deployment acceptance is tracked separately in release evidence."
+      "mappingEvidence": "Feature source integrated and verified together by PR #45; deployment acceptance is tracked separately in release evidence. PR #48 adds the direct Next.js start command and backup/restore runbook."
     },
     {
       "id": "SC-29",
@@ -434,7 +435,7 @@
     {
       "id": 5233327633,
       "number": 45,
-      "title": "SC-19\u2013SC-30: Complete Smart Cities registry and verified deployment",
+      "title": "SC-19–SC-30: Complete Smart Cities registry and verified deployment",
       "url": "https://github.com/Galinsky-2028/Smart-Cities-Surveillance-Registry/pull/45",
       "state": "closed",
       "draft": false,

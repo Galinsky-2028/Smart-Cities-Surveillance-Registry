@@ -4,7 +4,7 @@
 
 A public transparency and accountability application for documenting smart-city surveillance deployments, technologies, agencies, vendors, governing policies, authorizations, procurements, audits, incidents, data-sharing arrangements, and related public records.
 
-This repository is a **downstream application** of the [Civic Registry & Transparency Engine](https://github.com/neophilism/Civic-Registry-Transparency-Engine). The reusable engine remains domain-neutral in its own repository; Smart-Cities-specific schemas, adapters, presentation, and integrations live here.
+This repository is a **downstream application** of the [Civic Registry & Transparency Engine](https://github.com/Galinsky-2028/Civic-Registry-Transparency-Engine). The reusable engine remains domain-neutral in its own repository; Smart-Cities-specific schemas, adapters, presentation, and integrations live here.
 
 ## Release candidate
 
@@ -16,7 +16,8 @@ separate upstream project.
 
 Run `pnpm run ci` for the complete quality gate. See
 [release evidence](docs/V1_RELEASE_EVIDENCE.md), the
-[deployment guide](docs/PRODUCTION-DEPLOYMENT.md), and the
+[deployment guide](docs/PRODUCTION-DEPLOYMENT.md), the
+[backup and restore runbook](docs/BACKUP-RESTORE.md), and the
 [operator guide](docs/ADMIN-CONSOLE.md).
 
 Production installation creates the registry configuration only. Fictional
@@ -26,12 +27,14 @@ represent a registry awaiting reviewed publications.
 
 ## Upstream provenance
 
-The initial engine snapshot is pinned to:
+The engine snapshot is reconciled through:
 
 ```text
 Civic Registry & Transparency Engine
-commit 49bd3248dc976c6a56fbd2db949ad579579787dd
+commit 0ee3f29dffb20c649ea02466a7b0f70ed4024f9f
 ```
+
+The initial bootstrap snapshot was `49bd3248dc976c6a56fbd2db949ad579579787dd`.
 
 See [Upstream Engine](docs/UPSTREAM-ENGINE.md).
 

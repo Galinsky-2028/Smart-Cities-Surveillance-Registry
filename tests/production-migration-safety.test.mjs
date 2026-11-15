@@ -12,7 +12,10 @@ test("production bootstrap runs migration and config installation against a dire
   assert.match(cmd[2], /DATABASE_URL_UNPOOLED is required/);
   assert.match(cmd[2], /DATABASE_URL="\$DATABASE_URL_UNPOOLED" pnpm db:migrate/);
   assert.match(cmd[2], /DATABASE_URL="\$DATABASE_URL_UNPOOLED" pnpm db:bootstrap-config/);
-  assert.match(cmd[2], /exec pnpm --filter @smart-cities-surveillance-registry\/web exec next start/);
+  // Next.js must replace the shell directly so platform SIGTERM reaches its
+  // graceful shutdown handler instead of a package-manager wrapper.
+  assert.match(cmd[2], /cd apps\/web && exec node node_modules\/next\/dist\/bin\/next start /);
+  assert.doesNotMatch(cmd[2], /exec pnpm/);
 });
 
 test("Render deployment injects only secret-configured database URLs", async () => {

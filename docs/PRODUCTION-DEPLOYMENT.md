@@ -71,8 +71,9 @@ erase the source bytes while the database retains references.
 
 ## Recovery and safety
 
-Back up Neon data and retain migration/checkpoint history. Establish an
-operational restore test before public launch. Source refresh must preserve
+Back up Neon data and retain migration/checkpoint history. Follow the
+[backup schedule and restore runbook](BACKUP-RESTORE.md), and complete a restore
+rehearsal before public launch. Source refresh must preserve
 canonical evidence and prior versions, and must never auto-publish imported
 records. Configuration changes after initial installation require explicit
 review; bootstrapping intentionally refuses to silently overwrite an
