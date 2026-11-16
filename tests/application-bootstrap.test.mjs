@@ -3,7 +3,7 @@ import fs from "node:fs";
 import test from "node:test";
 
 const upstreamCommit =
-  "0ee3f29dffb20c649ea02466a7b0f70ed4024f9f";
+  "c4104fa927374a0e09cbba310e0d95ed83aefedf";
 
 test("Smart Cities application identity is established", () => {
   const root = JSON.parse(

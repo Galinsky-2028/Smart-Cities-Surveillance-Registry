@@ -31,7 +31,7 @@ The engine snapshot is reconciled through:
 
 ```text
 Civic Registry & Transparency Engine
-commit 0ee3f29dffb20c649ea02466a7b0f70ed4024f9f
+commit c4104fa927374a0e09cbba310e0d95ed83aefedf
 ```
 
 The initial bootstrap snapshot was `49bd3248dc976c6a56fbd2db949ad579579787dd`.

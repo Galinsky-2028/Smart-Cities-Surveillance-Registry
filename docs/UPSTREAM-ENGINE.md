@@ -6,7 +6,7 @@ This repository was bootstrapped from the clean, domain-neutral
 Current reconciled upstream commit:
 
 ```text
-0ee3f29dffb20c649ea02466a7b0f70ed4024f9f
+c4104fa927374a0e09cbba310e0d95ed83aefedf
 ```
 
 Initial upstream commit: `49bd3248dc976c6a56fbd2db949ad579579787dd`. That commit includes the core-purity
@@ -44,3 +44,16 @@ Future upstream changes should be reviewed deliberately:
 
 Application-specific features should not be pushed upstream unless they are
 first generalized into reusable civic infrastructure.
+
+## Reconciliation to c4104fa927374a0e09cbba310e0d95ed83aefedf (CRT-24, CRT-25)
+
+Both engine units generalized code that originated in this repository, so the
+downstream already contains the behavior and only the pin advances.
+
+| Upstream change | Downstream status |
+| --- | --- |
+| CRT-24 server-bound administrator principals, role credentials, sign-in limiter, explicit decisions | Originated here (SC-26); identical modules in `apps/web/lib/admin-*.ts` and `scripts/admin-principals.mjs`. |
+| CRT-24 DNS-pinned public source fetch | Originated here; identical `packages/source-adapters/src/{fetch,pinned-fetch}.ts`. |
+| CRT-25 PostgreSQL document storage, public archived copies | Originated here (SC-17, PR #49). Upstream numbers the migration `0014_document_content.sql`; downstream keeps `0018_document_content.sql` because 0014-0017 are Smart Cities migrations. Same SQL. |
+| CRT-25 `ingest-attachments` CLI command | Not adopted: downstream retrieves documents through the approved-source refresh opt-in instead. |
+
