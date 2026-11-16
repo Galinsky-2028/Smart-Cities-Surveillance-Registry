@@ -352,12 +352,13 @@
         41,
         45,
         46,
-        48
+        48,
+        50
       ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": [],
-      "mappingEvidence": "Feature source integrated and verified together by PR #45; deployment acceptance is tracked separately in release evidence. PR #48 adds the direct Next.js start command and backup/restore runbook."
+      "mappingEvidence": "Feature source integrated and verified together by PR #45; deployment acceptance is tracked separately in release evidence. PR #48 adds the direct Next.js start command and backup/restore runbook. PR #50 advances the reconciled engine pin."
     },
     {
       "id": "SC-29",
