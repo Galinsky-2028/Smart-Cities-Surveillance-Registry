@@ -48,8 +48,13 @@ data**. Live source onboarding must begin with verified official fields,
 schema mapping, and an observed dry-run/ingestion validation.
 
 Document attachment metadata from an adapter does not automatically mean the
-corresponding PDF bytes were archived. PDF ingestion must wait for durable
-evidence storage; do not rely on a free Render instance's ephemeral disk.
+corresponding PDF bytes were archived. A source opts in to retrieval with
+`"documents": { "enabled": true }` in its catalog entry. After the rows are
+imported, linked documents (`attachment_urls`) on the source's allowlisted
+hosts are fetched through the hardened client, matched to exactly one draft
+record by external identifier, stored in PostgreSQL by default, extracted and
+cited. Counts are recorded in the refresh run metadata. Retrieval does not
+publish anything; disclosure review still applies before any copy is public.
 
 ## Monitoring
 

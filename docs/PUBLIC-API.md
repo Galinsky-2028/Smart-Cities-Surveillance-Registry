@@ -126,6 +126,19 @@ GET /api/v1/registries/{registryId}/records/{recordId}/evidence
 The endpoint preserves field/document disclosure controls and cannot return
 hidden evidence or original artifact references for redacted documents.
 
+```text
+GET /api/v1/registries/{registryId}/records/{recordId}/documents/{documentId}/content
+```
+
+Downloads the archived public copy of a document cited by the record's public
+evidence, applying the same disclosure and public-safety filtering. Disclosed
+documents return the original bytes; redacted documents return only the
+reviewed redacted copy; withheld, uncited or unarchived documents return 404
+`document_content_not_available`. Responses are served as attachments with
+`X-Content-Type-Options: nosniff`, a sandboxing Content-Security-Policy and the
+content SHA-256 as the ETag. The record's evidence page links to this endpoint
+when an archived copy exists.
+
 ### History
 
 ```text

@@ -462,12 +462,18 @@ importers:
       '@civic-registry/database':
         specifier: workspace:*
         version: link:../database
+      '@civic-registry/documents':
+        specifier: workspace:*
+        version: link:../documents
       '@civic-registry/ingestion':
         specifier: workspace:*
         version: link:../ingestion
       '@civic-registry/source-adapters':
         specifier: workspace:*
         version: link:../source-adapters
+      '@smart-cities-surveillance-registry/documents':
+        specifier: workspace:*
+        version: link:../smart-cities-documents
       '@smart-cities-surveillance-registry/source-adapters':
         specifier: workspace:*
         version: link:../smart-cities-source-adapters

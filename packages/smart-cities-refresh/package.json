@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@civic-registry/database": "workspace:*",
+    "@civic-registry/documents": "workspace:*",
     "@civic-registry/ingestion": "workspace:*",
     "@civic-registry/source-adapters": "workspace:*",
+    "@smart-cities-surveillance-registry/documents": "workspace:*",
     "@smart-cities-surveillance-registry/source-adapters": "workspace:*",
     "pg": "^8.16.3"
   },
