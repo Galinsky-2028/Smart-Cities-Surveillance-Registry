@@ -208,9 +208,10 @@
       "title": "PDF attachment extraction",
       "origin": "original",
       "prs": [
-        17
+        17,
+        49
       ],
-      "mappingEvidence": "Verified merged GitHub PR #17; directly corresponds to named roadmap unit SC-17",
+      "mappingEvidence": "Verified merged GitHub PR #17; directly corresponds to named roadmap unit SC-17 PR #49 adds durable PostgreSQL evidence storage, opt-in refresh retrieval and disclosure-filtered public copies.",
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
