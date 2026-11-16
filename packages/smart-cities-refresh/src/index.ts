@@ -1,4 +1,5 @@
 import {
+  createDocumentStorage,
   PostgresIngestionService,
   PostgresSourceRefreshService,
   type RunDueSourceRefreshResult,
@@ -22,6 +23,9 @@ import {
   type ProcurementExportAdapterConfig,
   type SocrataAdapterConfig,
 } from "@smart-cities-surveillance-registry/source-adapters";
+import type { SourceAdapterRow } from "@civic-registry/source-adapters";
+import type { DocumentStorage } from "@civic-registry/documents";
+import { SmartCitiesDocumentIngestionService } from "@smart-cities-surveillance-registry/documents";
 import type { Pool } from "pg";
 
 export const SMART_CITIES_REGISTRY_ID = "smart-cities-surveillance-registry";
@@ -38,6 +42,11 @@ export interface ApprovedOfficialSource {
   enabled: boolean;
   adapter: ApprovedAdapter;
   ingestionProfile: RecordIngestionProfile;
+  /**
+   * Opt-in retrieval of linked documents (attachment_urls) into durable
+   * content-addressed storage, matched to the imported draft records.
+   */
+  documents?: { enabled: boolean };
   refresh: Pick<
     SourceRefreshJobDefinition,
     | "intervalSeconds"
@@ -139,6 +148,13 @@ export function validateOfficialSourceCatalog(value: unknown): OfficialSourceCat
       }
     }
     if (
+      source.documents !== undefined &&
+      (!source.documents || typeof source.documents !== "object" ||
+        typeof source.documents.enabled !== "boolean")
+    ) {
+      throw new Error("Official source document retrieval setting is invalid.");
+    }
+    if (
       !Number.isInteger(source.refresh.intervalSeconds) ||
       source.refresh.intervalSeconds < 300 ||
       !Number.isInteger(source.refresh.staleAfterSeconds) ||
@@ -158,19 +174,23 @@ export function validateOfficialSourceCatalog(value: unknown): OfficialSourceCat
 export async function runConfiguredSourceRefresh(
   pool: Pool,
   rawCatalog: unknown,
-  options: { limit?: number; now?: string } = {},
+  options: { limit?: number; now?: string; documentStorage?: DocumentStorage } = {},
 ): Promise<RunDueSourceRefreshResult> {
   const catalog = validateOfficialSourceCatalog(rawCatalog);
   const sources = new Map<
     string,
-    { adapter: SourceAdapter; profile: RecordIngestionProfile }
+    { adapter: SourceAdapter; profile: RecordIngestionProfile; documents: boolean }
   >();
   const definitions: SourceRefreshJobDefinition[] = [];
 
   for (const source of catalog.sources) {
     if (!source.enabled) continue;
     const adapter = createOfficialAdapter(source.adapter);
-    sources.set(source.id, { adapter, profile: source.ingestionProfile });
+    sources.set(source.id, {
+      adapter,
+      profile: source.ingestionProfile,
+      documents: source.documents?.enabled === true,
+    });
     definitions.push({
       ...source.refresh,
       id: source.id,
@@ -228,14 +248,42 @@ export async function runConfiguredSourceRefresh(
           sourceRefreshRunId: claim.run.id,
         },
       });
+      let metadata: Record<string, unknown> | undefined;
+      if (source.documents) {
+        const documents = await new SmartCitiesDocumentIngestionService(
+          pool,
+          options.documentStorage ?? createDocumentStorage(pool),
+        ).ingestAdapterRows({
+          registryId: catalog.registryId,
+          rows: parseAdapterRows(output),
+          allowedHosts: source.adapter.allowedHosts,
+        });
+        metadata = {
+          documents: {
+            matchedRecords: documents.matchedRecords,
+            created: documents.attachmentCreated,
+            existing: documents.attachmentExisting,
+            failed: documents.attachmentFailed,
+          },
+        };
+      }
       return {
         manifest,
         ingestionRunId: imported.run.id,
         ingestionStatus: imported.run.status,
         ingestionFailedItems: imported.run.failedItems,
+        ...(metadata ? { metadata } : {}),
       };
     },
   });
+}
+
+/** Adapter output is NDJSON; each line is one normalized source row. */
+export function parseAdapterRows(output: string): SourceAdapterRow[] {
+  return output
+    .split("\n")
+    .filter((line) => line.trim())
+    .map((line) => JSON.parse(line) as SourceAdapterRow);
 }
 
 export { projectSourceFreshness } from "./freshness.ts";

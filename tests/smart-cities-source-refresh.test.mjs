@@ -90,3 +90,17 @@ test("official refresh detects duplicate IDs, lifecycle bypass, and short cadenc
     /cadence/,
   );
 });
+
+test("official refresh document retrieval is an explicit boolean opt-in", async () => {
+  const { parseAdapterRows } = await import("../packages/smart-cities-refresh/src/index.ts");
+  const catalog = (documents) => ({ ...empty, sources: [{ ...source(), documents }] });
+  assert.equal(validateOfficialSourceCatalog(catalog({ enabled: true })).sources[0].documents.enabled, true);
+  assert.equal(validateOfficialSourceCatalog(catalog({ enabled: false })).sources[0].documents.enabled, false);
+  for (const invalid of [null, true, "yes", {}, { enabled: "true" }]) {
+    assert.throws(() => validateOfficialSourceCatalog(catalog(invalid)), /document retrieval/);
+  }
+  assert.deepEqual(
+    parseAdapterRows('{"external_id":"a","attachment_urls":["https://x.gov/a.pdf"]}\n\n{"external_id":"b"}\n'),
+    [{ external_id: "a", attachment_urls: ["https://x.gov/a.pdf"] }, { external_id: "b" }],
+  );
+});

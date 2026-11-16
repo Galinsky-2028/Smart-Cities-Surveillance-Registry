@@ -642,6 +642,51 @@ export async function getPublicEvidence(
   registry: CompiledRegistryConfig,
   record: RegistryRecord,
 ): Promise<PublicEvidenceResult> {
+  return (await loadPublicEvidence(registry, record)).result;
+}
+
+/**
+ * Storage key of the publicly releasable bytes for one document cited by a
+ * public record: the original for disclosed documents, the redacted copy for
+ * redacted documents, and nothing for withheld or uncited documents. Uses
+ * exactly the same disclosure and safety filtering as the public evidence view.
+ */
+export async function getPublicDocumentContentKey(
+  registry: CompiledRegistryConfig,
+  record: RegistryRecord,
+  documentId: string,
+): Promise<string | null> {
+  const { result, storageKeys } = await loadPublicEvidence(registry, record);
+  for (const [index, citation] of result.citations.entries()) {
+    if (citation.document?.id === documentId && storageKeys[index]) {
+      return storageKeys[index]!;
+    }
+  }
+  return null;
+}
+
+/** Public evidence plus the document IDs that have an archived public copy. */
+export async function getPublicEvidenceWithContent(
+  registry: CompiledRegistryConfig,
+  record: RegistryRecord,
+): Promise<{ evidence: PublicEvidenceResult; contentDocumentIds: string[] }> {
+  const { result, storageKeys } = await loadPublicEvidence(registry, record);
+  const contentDocumentIds = [
+    ...new Set(
+      result.citations.flatMap((citation, index) =>
+        citation.document && storageKeys[index]
+          ? [citation.document.id]
+          : [],
+      ),
+    ),
+  ];
+  return { evidence: result, contentDocumentIds };
+}
+
+async function loadPublicEvidence(
+  registry: CompiledRegistryConfig,
+  record: RegistryRecord,
+): Promise<{ result: PublicEvidenceResult; storageKeys: (string | undefined)[] }> {
   const { citations, disclosure } = getRepositories();
   const recordBundle =
     await disclosure.getRecordBundle(
@@ -653,8 +698,11 @@ export async function getPublicEvidence(
     recordBundle.record?.disposition === "withheld"
   ) {
     return {
-      citations: [],
-      groups: [],
+      result: {
+        citations: [],
+        groups: [],
+      },
+      storageKeys: [],
     };
   }
 
@@ -685,8 +733,10 @@ export async function getPublicEvidence(
       registry.definition.id,
       documentIds,
     );
+  const projectedKeys: (string | undefined)[] = [];
   const presented = evidence.map((item) => {
     if (!item.document) {
+      projectedKeys.push(undefined);
       return presentCitation(
         item,
         record,
@@ -705,6 +755,7 @@ export async function getPublicEvidence(
         bundle.document ?? null,
         bundle.redactions,
       );
+    projectedKeys.push(projection.document.storageKey);
 
     return presentCitation(
       {
@@ -728,24 +779,30 @@ export async function getPublicEvidence(
     );
   });
 
-  const safePresented =
-    registry.definition.id ===
-    SMART_CITIES_REGISTRY_ID
-      ? presented.filter(
-          (citation) =>
-            scanSmartCitiesPublicPayload(
-              citation,
-              "citation",
-            ).length === 0,
-        )
-      : presented;
+  const keep = presented.map(
+    (citation) =>
+      registry.definition.id !==
+        SMART_CITIES_REGISTRY_ID ||
+      scanSmartCitiesPublicPayload(
+        citation,
+        "citation",
+      ).length === 0,
+  );
+  const safePresented = presented.filter(
+    (_citation, index) => keep[index],
+  );
 
   return {
-    citations: safePresented,
-    groups:
-      groupPresentedCitations(
-        safePresented,
-      ),
+    result: {
+      citations: safePresented,
+      groups:
+        groupPresentedCitations(
+          safePresented,
+        ),
+    },
+    storageKeys: projectedKeys.filter(
+      (_key, index) => keep[index],
+    ),
   };
 }
 

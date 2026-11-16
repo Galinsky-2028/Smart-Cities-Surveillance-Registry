@@ -48,13 +48,24 @@ and installs only the verified schema configuration on first boot.
 
 ## Persistent evidence files
 
-Neon stores registry metadata and audit history, not retrieved PDF bytes.
-The document-ingestion component currently supports local content-addressed
-storage. Render's free instances have ephemeral filesystems and do not support
-persistent disks. Therefore **do not enable PDF retrieval/ingestion on a free
-web service**: use an independently persistent file store or a suitable paid
-persistent disk before collecting evidence. An ordinary redeploy can otherwise
-erase the source bytes while the database retains references.
+Retrieved document bytes are stored content-addressed in PostgreSQL by default
+(`civic_registry_document_content`, migration 0018), so evidence survives
+redeploys on a free Render instance whose filesystem is erased. Each row is
+immutable, keyed by SHA-256, verified on every read and limited to 25 MiB.
+`CIVIC_REGISTRY_DOCUMENT_STORAGE=filesystem` with
+`CIVIC_REGISTRY_DOCUMENT_STORAGE_DIR` selects disk storage instead; use it only
+on a durable mount.
+
+Database storage counts against the Neon plan's storage allowance. Check the
+plan before enabling document retrieval for large catalogs, and include
+`civic_registry_document_content` in backups (it is part of the normal logical
+dump in [BACKUP-RESTORE.md](BACKUP-RESTORE.md)).
+
+Archived copies are served publicly only through
+`GET /api/v1/registries/{registryId}/records/{recordId}/documents/{documentId}/content`
+for documents cited by a public record: disclosed documents serve the
+original, redacted documents serve only the reviewed redacted copy
+(`publicStorageKey`), and withheld documents return 404.
 
 ## Operations / Engine Room
 
